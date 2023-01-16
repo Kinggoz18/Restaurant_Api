@@ -25,11 +25,11 @@ namespace Restaurant_Api.Models
         //The Item Id
         public ObjectId _Id { get; set; }
         //Name of the item
-        public string Name { get; set; }
+        public string? Name { get; set; }
         //Price of the item
-        public BsonDouble Price { get; set; }
+        public BsonDouble? Price { get; set; }
         //Menu the item belongs to
-        public string Menu { get; set; }
+        public string? Menu { get; set; }
     }
 }
 

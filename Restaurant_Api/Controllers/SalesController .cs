@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Restaurant_Api.Controllers
 {
     [ApiController]
-    [Route("[Controller]")]
+    [Route("[controller]")]
     public class SalesController : ControllerBase
     {
         public SalesController()

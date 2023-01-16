@@ -34,7 +34,7 @@ namespace Restaurant_Api.Models
         //The card number 
         public int CardNumber { get; set; }
         //The expiry date of the card
-        public string ExpiryDate { get; set; }
+        public string? ExpiryDate { get; set; }
     }
 
     //Paypal payments
@@ -43,9 +43,9 @@ namespace Restaurant_Api.Models
         //The payement Id
         public ObjectId _Id { get; set; }
         //The users paypal email address
-        public string Email { get; set; }
+        public string? Email { get; set; }
         //The users paypal password
-        public string Password { get; set; }
+        public string? Password { get; set; }
     }
 }
 
