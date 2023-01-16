@@ -80,8 +80,8 @@ namespace Restaurant_Api.Services
     //Admin Services
     public class AdminServices : iAccountServices<Admin>
     {
-        static IMongoCollection<Admin> AdminCollection;     //Admin collection
-        static ConnectDB connection;
+        static IMongoCollection<Admin>? AdminCollection;     //Admin collection
+        static ConnectDB? connection;
         public AdminServices()
         {
             connection = new ConnectDB();
@@ -131,8 +131,8 @@ namespace Restaurant_Api.Services
     //Employee services 
     public class EmployeeServices : iAccountServices<Employee>
     {
-        static IMongoCollection<Employee> EmployeeCollection;   //Employee collection
-        static ConnectDB connection;
+        static IMongoCollection<Employee>? EmployeeCollection;   //Employee collection
+        static ConnectDB? connection;
 
         public EmployeeServices()
         {
