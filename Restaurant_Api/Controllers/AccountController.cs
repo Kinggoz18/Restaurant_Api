@@ -7,7 +7,7 @@
 |
 | Purpose: Contains services available for a Order object.
 |
-| usage: Used in PaymentControler and other classes that may depend on it.
+| usage: Used in controllers and other classes that may depend on it.
 |
 | Description of properties: None
 |
