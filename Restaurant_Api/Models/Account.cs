@@ -7,9 +7,8 @@
 |
 | Purpose: Blueprint for an account object.
 |
-| usage: None.
+| usage: Models for database schema.
 |
-
 | Description of properties:
 | argv[1] - number if random number pairs to generate
 |
@@ -61,6 +60,8 @@ namespace Restaurant_Api.Models
         public string? EmailAddress { get; set; }
         //The user password
         public string? Password { get; set; }
+        //The user admin key
+        public string? AdminKey { get; set; }
     }
     public class Employee : iAccount
     {

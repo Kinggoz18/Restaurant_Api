@@ -7,9 +7,8 @@
 |
 | Purpose: Blueprint for an Payment object.
 |
-| usage: None.
+| usage: Models for database schema.
 |
-
 | Description of properties:
 | argv[1] - number if random number pairs to generate
 |

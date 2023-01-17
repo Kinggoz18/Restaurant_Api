@@ -8,6 +8,7 @@ namespace Restaurant_Api.Controllers
     {
         public SalesController()
         {
+
         }
     }
 }
