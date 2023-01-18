@@ -34,10 +34,11 @@ namespace Restaurant_Api.Services
     //Customer Services
     public class CustomerServices : iAccountServices<Customer>
 	{
-        static ConnectDB connection = new ConnectDB();
+         static ConnectDB connection = new ConnectDB();
         static IMongoCollection<Customer> CustomerCollection = connection.Client.GetDatabase("Drum_Rock_Jerk").GetCollection<Customer>("Customer");   //Customer collection
 
         public CustomerServices()
+
 		{
 			
         }
@@ -146,7 +147,7 @@ namespace Restaurant_Api.Services
         }
     }
 
-    //Employee services 
+    //Employee services
     public class EmployeeServices : iAccountServices<Employee>
     {
         static IMongoCollection<Employee>? EmployeeCollection;   //Employee collection
@@ -158,7 +159,7 @@ namespace Restaurant_Api.Services
             EmployeeCollection = connection.Client.GetDatabase("Drum_Rock_Jerk").GetCollection<Employee>("Employee");
         }
 
-        //Add a new 
+        //Add a new
         public static void Add(Employee account)
         {
             EmployeeCollection.InsertOne(account);
@@ -205,4 +206,3 @@ namespace Restaurant_Api.Services
         }
     }
 }
-
