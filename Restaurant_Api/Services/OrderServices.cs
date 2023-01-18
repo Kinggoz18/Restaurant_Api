@@ -18,15 +18,16 @@ using ConnectDatabase;
 using MongoDB.Driver;
 using MongoDB.Bson;
 using Restaurant_Api.Models;
+using ConnectDatabase;
 
 namespace Restaurant_Api.Services
 {
 	public class OrderServices
 	{
-        private readonly IMongoCollection<Order> _orders;
+        static ConnectDB connection = new ConnectDB();
+        static IMongoCollection<Order> _orders = connection.Client.GetDatabase("Drum_Rock_Jerk").GetCollection<Order>("orders");
         public OrderServices(IMongoDatabase database) 
 		{
-            _orders = database.GetCollection<Order>("orders");
 
         }
         // provides a list of orders
@@ -37,7 +38,7 @@ namespace Restaurant_Api.Services
         //get customers orders
         public Order GetOrder(ObjectId id)
         {
-            var order = _orders.Find<Order>(o => o._Id == id).FirstOrDefault();
+            var order = _orders.Find<Order>(o => o._id == id).FirstOrDefault();
             return order;
         }
         //create an order 
@@ -50,18 +51,18 @@ namespace Restaurant_Api.Services
 
         public void UpdateOrder(ObjectId id, Order orderIn)
         {
-            _orders.ReplaceOne(order => order._Id == id, orderIn);
+            _orders.ReplaceOne(order => order._id == id, orderIn);
         }
 
         public void RemoveOrder(Order orderIn)
         {
-            _orders.DeleteOne(order => order._Id == orderIn._Id);
+            _orders.DeleteOne(order => order._id == orderIn._id);
         }
         //delete a single document from a collection that matches a specified filter. In
 
         public void RemoveOrder(ObjectId id)
         {
-            _orders.DeleteOne(order => order._Id == id);
+            _orders.DeleteOne(order => order._id == id);
         }
     }
     

@@ -26,7 +26,7 @@ namespace Restaurant_Api.Models
         //Name of the item
         public string? Name { get; set; }
         //Price of the item
-        public BsonDouble? Price { get; set; }
+        public double? Price { get; set; }
         //Menu the item belongs to
         public string? Menu { get; set; }
     }
