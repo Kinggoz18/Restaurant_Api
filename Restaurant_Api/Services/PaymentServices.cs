@@ -24,7 +24,7 @@ namespace Restaurant_Api.Services
 	//Add payment
 	//Remove Payment
 	//Get Payment
-	public interface iPaymentServices<T> where T : iPayments
+	public interface iPaymentServices<T>
 	{
 		public static abstract void Add(T payment);
 		public static abstract void Remove(ObjectId id);

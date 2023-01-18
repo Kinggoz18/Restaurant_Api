@@ -23,7 +23,6 @@ namespace ConnectDatabase
 		private readonly MongoClient client;
         public ConnectDB()
 		{
-
 			client = new MongoClient("mongodb+srv://billyrestaurant:{Restaurant2022}@cluster0.dzorkng.mongodb.net/?retryWrites=true&w=majority");
         }
 

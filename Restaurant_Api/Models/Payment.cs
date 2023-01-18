@@ -18,18 +18,13 @@ using System;
 using MongoDB.Bson;
 namespace Restaurant_Api.Models
 {
-    public interface iPayments
-    {
-        //The payement Id
-        public ObjectId _Id { get; set; }
-    }
     //Card payments
-    public class CardPayment : iPayments
+    public class CardPayment
     {
         //The payement Id
-        public ObjectId _Id { get; set; }
+        public ObjectId _id { get; set; }
         //The user of payements Id
-        public ObjectId ownerID { get; set; }
+        public ObjectId OwnerID { get; set; }
         //The card number 
         public int CardNumber { get; set; }
         //The expiry date of the card
@@ -37,14 +32,32 @@ namespace Restaurant_Api.Models
     }
 
     //Paypal payments
-    public class PaypalPayment : iPayments
+    public class PaypalPayment
     {
         //The payement Id
-        public ObjectId _Id { get; set; }
+        public ObjectId _id { get; set; }
         //The users paypal email address
         public string? Email { get; set; }
-        //The users paypal password
-        public string? Password { get; set; }
+    }
+
+    //Card credentials - Would not be stored in the database
+    public class CardDetails
+    {
+        //The user of payements Id
+        public ObjectId OwnerID { get; set; }
+        //The users first name
+        public string? FirstName { get; set; }
+        //The users last name
+        public string? LastName { get; set; }
+        //The card Number
+        public int CardNumber { get; set; }
+        //The expiry date of the card
+        public string? ExpiryDate { get; set; }
+        //The card Number
+        public int CVV { get; set; }
+        //The users postal code Number
+        public string? PostalCode { get; set; }
+
     }
 }
 

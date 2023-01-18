@@ -23,7 +23,7 @@ namespace Restaurant_Api.Services
 {
 	public class MenuItemServices
     {
-        static IMongoCollection<MenuItem> MenuItemCollection;   //MenuItem collection
+        static IMongoCollection<MenuItem>? MenuItemCollection;   //MenuItem collection
         static ConnectDB? connection;
 
         public MenuItemServices()
@@ -60,10 +60,10 @@ namespace Restaurant_Api.Services
         //Update a MenuItem
         public static void Update(MenuItem account)
         {
-            MenuItem toRemove = Get(account._Id);
+            MenuItem toRemove = Get(account._id);
             if (toRemove == null)
                 return;
-            FilterDefinition<MenuItem> filter = Builders<MenuItem>.Filter.Eq("_id", account._Id);
+            FilterDefinition<MenuItem> filter = Builders<MenuItem>.Filter.Eq("_id", account._id);
             MenuItemCollection.FindOneAndReplace(filter, account);
         }
     }

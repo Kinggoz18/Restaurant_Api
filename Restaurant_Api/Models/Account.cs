@@ -22,12 +22,16 @@ namespace Restaurant_Api.Models
     public interface iAccount
     {
         //The user ID
-        public ObjectId _Id { get; set; }
+        public ObjectId _id { get; set; }
+        //The user email address
+        public string? EmailAddress { get; set; }
+        //The user password
+        public string? Password { get; set; }
     }
 	public class Customer : iAccount
 	{
 		//The user ID
-        public ObjectId _Id { get; set; }
+        public ObjectId _id { get; set; }
         //The user first name
         public string? FirstName { get; set; }
         //The user last name
@@ -41,7 +45,7 @@ namespace Restaurant_Api.Models
         //The user points accumulated
         public int Points { get; set; }
         //A list of the users payments
-        public List<iPayments>? payments { get; set; }
+        public List<PaypalPayment>? payments { get; set; }
         //A list of the users past orders
         public List<Order>? PastOrders { get; set; }
 
@@ -49,7 +53,7 @@ namespace Restaurant_Api.Models
     public class Admin : iAccount
     {
         //The user ID
-        public ObjectId _Id { get; set; }
+        public ObjectId _id { get; set; }
         //The user first name
         public string? FirstName { get; set; }
         //The user last name
@@ -66,7 +70,7 @@ namespace Restaurant_Api.Models
     public class Employee : iAccount
     {
         //The user ID
-        public ObjectId _Id { get; set; }
+        public ObjectId _id { get; set; }
         //The user first name
         public string? FirstName { get; set; }
         //The user last name

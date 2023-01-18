@@ -23,8 +23,9 @@ namespace Restaurant_Api.Services
 {
     //interface for all accounts
     public interface iAccountServices<T> where T : iAccount {
-        public static abstract List<T> GetAll();
-        public static abstract T Get(ObjectId id);
+        public static abstract List<T> GetAll(string AdminKey);
+        public static abstract T Login(T account);
+        public static abstract T Get(ObjectId account);
         public static abstract void Add(T account);
         public static abstract void Update(T account);
         public static abstract void Remove(ObjectId id);
@@ -33,23 +34,29 @@ namespace Restaurant_Api.Services
     //Customer Services
     public class CustomerServices : iAccountServices<Customer>
 	{
-        static IMongoCollection<Customer> CustomerCollection;   //Customer collection
-        static ConnectDB? connection;
+        static ConnectDB connection = new ConnectDB();
+        static IMongoCollection<Customer> CustomerCollection = connection.Client.GetDatabase("Drum_Rock_Jerk").GetCollection<Customer>("Customer");   //Customer collection
 
         public CustomerServices()
 		{
-			connection = new ConnectDB();
-            CustomerCollection = connection.Client.GetDatabase("Drum_Rock_Jerk").GetCollection<Customer>("Customer");
+			
         }
 
         //Get All the customers in the Database
-        public static List<Customer> GetAll() {
+        public static List<Customer> GetAll(string AdminKey) {
             return CustomerCollection.Find(_ => true).ToList();
         }
         //Get a customer for a particular id
         public static Customer Get(ObjectId id)
         {
             FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("_id", id);
+            Customer result = CustomerCollection.Find(filter).First();
+            return result;
+        }
+        public static Customer Login(Customer account)
+        {
+            FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("EmailAddress", account.EmailAddress);
+            //Check the password matches here 
             Customer result = CustomerCollection.Find(filter).First();
             return result;
         }
@@ -69,19 +76,20 @@ namespace Restaurant_Api.Services
         //Update a customer
         public static void Update(Customer account)
         {
-            Customer toRemove = Get(account._Id);
+            Customer toRemove = Get(account._id);
             if (toRemove == null)
                 return;
-            FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("_id", account._Id);
+            FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("_id", account._id);
             CustomerCollection.FindOneAndReplace(filter, account);
         }
     }
 
     //Admin Services
-    public class AdminServices : iAccountServices<Admin>
+    public class AdminServices
     {
         static IMongoCollection<Admin>? AdminCollection;     //Admin collection
         static ConnectDB? connection;
+       
         public AdminServices()
         {
             connection = new ConnectDB();
@@ -100,16 +108,26 @@ namespace Restaurant_Api.Services
             Admin result = AdminCollection.Find(filter).First();
             return result;
         }
-
-        //Get all the admin in the database
-        public static List<Admin> GetAll()
+        //Return an admin from the database
+        public static Admin Login(Admin account)
         {
+            FilterDefinition<Admin> filter = Builders<Admin>.Filter.Eq("EmailAddress", account.EmailAddress);
+            Admin result = AdminCollection.Find(filter).First();
+            return result;
+        }
+
+        //Get all the Admin in the database
+        public static List<Admin> GetAll(string AdminKey)
+        {
+            //Check the admin key is in the database here
+
             return AdminCollection.Find(_ => true).ToList();
         }
 
-        //Remove an admin from the database
-        public static void Remove(ObjectId id)
+        //Remove any account from the database
+        public static void Remove(ObjectId id, string Adminkey)
         {
+            //Check the type of the account then remove it correctly !Implement
             Admin toRemove = Get(id);
             if (toRemove == null)
                 return;
@@ -118,12 +136,12 @@ namespace Restaurant_Api.Services
         }
 
         //Update a particular admin account
-        public static void Update(Admin account)
+        public static void Update(Admin account, string Adminkey)
         {
-            Admin toRemove = Get(account._Id);
+            Admin toRemove = Get(account._id);
             if (toRemove == null)
                 return;
-            FilterDefinition<Admin> filter = Builders<Admin>.Filter.Eq("_id", account._Id);
+            FilterDefinition<Admin> filter = Builders<Admin>.Filter.Eq("_id", account._id);
             AdminCollection.FindOneAndReplace(filter, account);
         }
     }
@@ -153,9 +171,15 @@ namespace Restaurant_Api.Services
             Employee result = EmployeeCollection.Find(filter).First();
             return result;
         }
-
+        //Return an Employee from the database
+        public static Employee Login(Employee account)
+        {
+            FilterDefinition<Employee> filter = Builders<Employee>.Filter.Eq("EmailAddress", account.EmailAddress);
+            Employee result = EmployeeCollection.Find(filter).First();
+            return result;
+        }
         //Get all the Employee in the database
-        public static List<Employee> GetAll()
+        public static List<Employee> GetAll(string AdminKey)
         {
             return EmployeeCollection.Find(_ => true).ToList();
         }
@@ -173,10 +197,10 @@ namespace Restaurant_Api.Services
         //Update a particular Employee account
         public static void Update(Employee account)
         {
-            Employee toRemove = Get(account._Id);
+            Employee toRemove = Get(account._id);
             if (toRemove == null)
                 return;
-            FilterDefinition<Employee> filter = Builders<Employee>.Filter.Eq("_id", account._Id);
+            FilterDefinition<Employee> filter = Builders<Employee>.Filter.Eq("_id", account._id);
             EmployeeCollection.FindOneAndReplace(filter, account);
         }
     }
