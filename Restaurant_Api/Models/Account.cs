@@ -64,8 +64,6 @@ namespace Restaurant_Api.Models
         public string? EmailAddress { get; set; }
         //The user password
         public string? Password { get; set; }
-        //The user admin key
-        public string? AdminKey { get; set; }
     }
     public class Employee : iAccount
     {
@@ -77,6 +75,13 @@ namespace Restaurant_Api.Models
         public string? LastName { get; set; }
         //The user phone number
         public string? PhoneNumber { get; set; }
+        //The user email address
+        public string? EmailAddress { get; set; }
+        //The user password
+        public string? Password { get; set; }
+    }
+    public class Login_Credential
+    {
         //The user email address
         public string? EmailAddress { get; set; }
         //The user password

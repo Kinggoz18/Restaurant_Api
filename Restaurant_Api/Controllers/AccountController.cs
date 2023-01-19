@@ -31,27 +31,33 @@ namespace Restaurant_Api.Controllers
         }
 
         //Endpoint to fetch all accounts from the database
-        [HttpGet("{AdminKey}")]
-        public ActionResult<List<Admin>> GetAllAccount(string AdminKey) => AdminServices.GetAll(AdminKey);
+        [HttpGet]
+        [Route("GetAllAdmin/{AdminId}")]
+        public ActionResult<List<Admin>> GetAllAccount(string AdminId) => AdminServices.GetAll(AdminId);
 
         //Endpoint to login in an account
-        [HttpGet]
-        public ActionResult<Admin> LoginAccount(Admin account) => AdminServices.Login(account);
+        [HttpPost]
+        [Route("LoginAdmin")]
+        public ActionResult<Admin> LoginAccount(Login_Credential account) => AdminServices.Login(account);
 
         //Endpoint to get a particular account details
-        [HttpGet("{id}")]
-        public ActionResult<iAccount> Get(ObjectId id) => AdminServices.Get(id);
+        [HttpGet]
+        [Route("GetAdmin/{id}")]
+        public ActionResult<Admin> Get(string id) => AdminServices.Get(id);
 
         //Endpoint to delete any account from the database
         [HttpDelete]
-        public void DeleteAccount(ObjectId id, string Adminkey) => AdminServices.Remove(id, Adminkey);
+        [Route("DeleteAdmin/{id}")]
+        public void DeleteAccount(string id) => AdminServices.Remove(id);
 
         //Endpoint to update a particular admin account
-        [HttpPut("{id}")]
-        public void UpdateAccount(Admin account, string AdminKey) => AdminServices.Update(account, AdminKey);
+        [HttpPut]
+        [Route("UpdateAdmin/")]
+        public void UpdateAccount(Admin account) => AdminServices.Update(account);
 
         //Endpoint to add a new Admin
         [HttpPost]
+        [Route("CreateAdmin/")]
         public void CreateAccount(Admin account) => AdminServices.Add(account);
     }
 
@@ -66,7 +72,7 @@ namespace Restaurant_Api.Controllers
 
         //Endpoint to fetch all accounts from the database
         [HttpGet("{AdminKey}")]
-        public ActionResult<List<Customer>> GetAllAccount(string AdminKey) => CustomerServices.GetAll(AdminKey);
+        public ActionResult<List<Customer>> GetAllAccount(string AdminId) => CustomerServices.GetAll(AdminId);
 
         //Endpoint to login in an account
         [HttpPost("{id}")]
@@ -74,15 +80,15 @@ namespace Restaurant_Api.Controllers
 
         //Endpoint to get a particular account details
         [HttpGet("{id}")]
-        public ActionResult<iAccount> Get(ObjectId id) => CustomerServices.Get(id);
+        public ActionResult<iAccount> Get(string id) => CustomerServices.Get(id);
 
         //Endpoint to delete any account from the database
         [HttpDelete]
-        public void DeleteAccount(ObjectId id, string Adminkey) => CustomerServices.Remove(id);
+        public void DeleteAccount(string id) => CustomerServices.Remove(id);
 
         //Endpoint to update a particular admin account
         [HttpPut("{id}")]
-        public void UpdateAccount(Customer account, string AdminKey) => CustomerServices.Update(account);
+        public void UpdateAccount(Customer account) => CustomerServices.Update(account);
 
         //Endpoint to add a new Admin
         [HttpPost]
@@ -100,7 +106,7 @@ namespace Restaurant_Api.Controllers
 
         //Endpoint to fetch all accounts from the database
         [HttpGet("{AdminKey}")]
-        public ActionResult<List<Employee>> GetAllAccount(string AdminKey) => EmployeeServices.GetAll(AdminKey);
+        public ActionResult<List<Employee>> GetAllAccount(string AdminId) => EmployeeServices.GetAll(AdminId);
 
         //Endpoint to login in an account
         [HttpGet]
@@ -108,11 +114,11 @@ namespace Restaurant_Api.Controllers
 
         //Endpoint to get a particular account details
         [HttpGet("{id}")]
-        public ActionResult<iAccount> Get(ObjectId id) => EmployeeServices.Get(id);
+        public ActionResult<iAccount> Get(string id) => EmployeeServices.Get(id);
 
         //Endpoint to delete any account from the database
         [HttpDelete]
-        public void DeleteAccount(ObjectId id, string Adminkey) => EmployeeServices.Remove(id);
+        public void DeleteAccount(string id) => EmployeeServices.Remove(id);
 
         //Endpoint to update a particular admin account
         [HttpPut("{id}")]
