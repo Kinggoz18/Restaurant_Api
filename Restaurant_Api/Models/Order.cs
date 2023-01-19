@@ -23,6 +23,7 @@
 
 
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using System;
 namespace Restaurant_Api.Models
 {
@@ -30,12 +31,18 @@ namespace Restaurant_Api.Models
     {
         //this is the customer id 
         public ObjectId _id { get; set; }
+        //this will get the users name
+        [BsonElement("Name")]
+        public string? CustomerName { get; }
         //the users phone number 
         public string? PhoneNumber { get; set; }
         // the users order item gotten form the menu 
         public List<MenuItem>? items { get; set; }
         //the date and time the user ordered 
         public string? orderdate { get; set; }
+        //order status gets the 
+        public string? status { get; set; }
+
         //the total price for the order
         public double TotalPrice { get; set; }
 
