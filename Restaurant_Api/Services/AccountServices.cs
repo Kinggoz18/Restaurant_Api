@@ -69,27 +69,45 @@ namespace Restaurant_Api.Services
 
         //Get All the customers in the Database
         public static List<Customer> GetAll(string AdminId) {
-            Admin current = AdminServices.Get(AdminId);
-            if (current == null)
-                return new List<Customer>();
+            try
+            {
 
-            return CustomerCollection.Find(_ => true).ToList();
+                Admin current = AdminServices.Get(AdminId);
+                if (current == null)
+                    return new List<Customer>();
+
+                return CustomerCollection.Find(_ => true).ToList();
+            }
+            catch
+            {
+                Console.WriteLine("Inalid body response passed.");
+                return null;
+            }
         }
         //Get a customer for a particular id
         public static Customer Get(string id)
         {
-            ObjectId SearchId = new ObjectId(id);
-            FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("_id", SearchId);
-            Customer result = CustomerCollection.Find(filter).FirstOrDefault();
-            return result;
+            try
+            {
+
+                ObjectId SearchId = new ObjectId(id);
+                FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("_id", SearchId);
+                Customer result = CustomerCollection.Find(filter).FirstOrDefault();
+                return result;
+            }
+            catch 
+            {
+                Console.WriteLine("Inalid body response passed.");
+                return null;
+            }
         }
         public static Customer Login(Login_Credential account)
         {
-            FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("EmailAddress", account.EmailAddress);
-            if (filter == null)
-                return new Customer();
             try
             {
+                FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("EmailAddress", account.EmailAddress);
+                if (filter == null)
+                    return new Customer();
                 Customer result = CustomerCollection.Find(filter).FirstOrDefault();
                 if (result != null)
                 {
@@ -105,13 +123,18 @@ namespace Restaurant_Api.Services
                 Console.WriteLine("Inalid body response passed.");
                 return null;
             }
+            catch
+            {
+                Console.WriteLine("Inalid body response passed.");
+                return null;
+            }
         }
         //Add Customer
         public static Customer Add(Customer account) {
-            //Find if an account with the existing email already exists
-            FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("EmailAddress", account.EmailAddress);
             try
             {
+                //Find if an account with the existing email already exists
+                FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("EmailAddress", account.EmailAddress);
                 Customer result = CustomerCollection.Find(filter).FirstOrDefault();
                 if (result != null)
                 {
@@ -127,26 +150,50 @@ namespace Restaurant_Api.Services
                 Console.WriteLine(ex.Message);
                 return null;
             }
+            catch
+            {
+                Console.WriteLine("Inalid body response passed.");
+                return null;
+            }
         }
         //Delete Customer
         public static void Remove(string id)
         {
-            Customer toRemove = Get(id);
-            if (toRemove == null)
+            try
+            {
+
+                Customer toRemove = Get(id);
+                if (toRemove == null)
+                    return;
+                FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("_id", toRemove._id);
+                CustomerCollection.FindOneAndDelete(filter);
+            }
+            catch
+            {
+                Console.WriteLine("Inalid body response passed.");
                 return;
-            FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("_id", toRemove._id);
-            CustomerCollection.FindOneAndDelete(filter);
+            }
         }
         //Update a customer
         public static Customer Update(Customer account, string AccountoUpdate_ID)
         {
-            Customer toUpdate = Get(AccountoUpdate_ID);
-            if (toUpdate == null)
+            try
+            {
+
+                Customer toUpdate = Get(AccountoUpdate_ID);
+                if (toUpdate == null)
+                    return null;
+                account._id = toUpdate._id;
+                FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("_id", toUpdate._id);
+                account.Password = EncryptPassword.HashPassword(account.Password);  //Encrypt the password again
+                CustomerCollection.FindOneAndReplace(filter, account);
+                return account;
+            }
+            catch 
+            {
+                Console.WriteLine("Inalid body response passed.");
                 return null;
-            account._id = toUpdate._id;
-            FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("_id", toUpdate._id);
-            CustomerCollection.FindOneAndReplace(filter, account);
-            return account;
+            }
         }
     }
 
@@ -164,28 +211,37 @@ namespace Restaurant_Api.Services
         //Add a new Admin
         public static Admin Add(Admin account)
         {
-            //Find if an account with the existing email already exists
-            FilterDefinition<Admin> filter = Builders<Admin>.Filter.Eq("EmailAddress", account.EmailAddress);
-            Admin result = AdminCollection.Find(filter).FirstOrDefault();
-            if (result != null)
+            try
             {
+                //Find if an account with the existing email already exists
+                FilterDefinition<Admin> filter = Builders<Admin>.Filter.Eq("EmailAddress", account.EmailAddress);
+                Admin result = AdminCollection.Find(filter).FirstOrDefault();
+                if (result != null)
+                {
+                    return null;
+                }
+                //Hash the password
+                account.Password = EncryptPassword.HashPassword(account.Password);  //Hash the password
+                AdminCollection.InsertOne(account);
+                return result = AdminCollection.Find(filter).FirstOrDefault();
+            }
+            catch
+            {
+                Console.WriteLine("An Exception occured!");
                 return null;
             }
-            //Hash the password
-            account.Password = EncryptPassword.HashPassword(account.Password);  //Hash the password
-            AdminCollection.InsertOne(account);
-            return result = AdminCollection.Find(filter).FirstOrDefault();
         }
 
         //Return an admin from the database
         public static Admin Get(string id)
         {
-            ObjectId SearchId = new ObjectId(id);
-            FilterDefinition<Admin> filter = Builders<Admin>.Filter.Eq("_id", SearchId);
-            Admin result;
             try
             {
+                ObjectId SearchId = new ObjectId(id);
+                FilterDefinition<Admin> filter = Builders<Admin>.Filter.Eq("_id", SearchId);
+                Admin result;
                 result = AdminCollection.Find(filter).FirstOrDefault();
+                return result;
             }
             catch (InvalidOperationException ex)
             {
@@ -193,7 +249,12 @@ namespace Restaurant_Api.Services
                 Console.WriteLine("Inalid Admin ID passed.");
                 return null;
             }
-            return result;
+            catch
+            {
+                Console.WriteLine("An Exception occured!");
+                return null;
+            }
+
 
         }
         //Return an admin from the database
@@ -217,37 +278,69 @@ namespace Restaurant_Api.Services
                 Console.WriteLine("Inalid body response passed.");
                 return null;
             }
+            catch
+            {
+                Console.WriteLine("An Exception occured!");
+                return null;
+            }
         }
 
         //Get all the Admin in the database
         public static List<Admin> GetAll(string AdminId)
         {
-            Admin current = AdminServices.Get(AdminId);
-            if (current == null)
-                return new List<Admin>();
-            return AdminCollection.Find(_ => true).ToList();
+            try
+            {
+
+                Admin current = AdminServices.Get(AdminId);
+                if (current == null)
+                    return new List<Admin>();
+                return AdminCollection.Find(_ => true).ToList();
+            }
+            catch 
+            {
+                Console.WriteLine("An Exception occured!");
+                return null;
+            }
         }
 
         //Remove any account from the database
         public static void Remove(string id)
         {
-            //Check the type of the account then remove it correctly !Implement
-            Admin toRemove = Get(id);
-            if (toRemove == null)
+            try
+            {
+                 //Check the type of the account then remove it correctly !Implement
+                Admin toRemove = Get(id);
+                if (toRemove == null)
+                    return;
+                FilterDefinition<Admin> filter = Builders<Admin>.Filter.Eq("_id", toRemove._id); ;
+                AdminCollection.FindOneAndDelete(filter);
+            }
+            catch
+            {
+                Console.WriteLine("An Exception occured!");
                 return;
-            FilterDefinition<Admin> filter = Builders<Admin>.Filter.Eq("_id", toRemove._id);;
-            AdminCollection.FindOneAndDelete(filter);
+            }
         }
 
         //Update a particular admin account
         public static void Update(Admin account, string AdminToUpdate_ID)
         {
-            Admin toUpdate = Get(AdminToUpdate_ID);
-            if (toUpdate == null)
-                return;
-            account._id = toUpdate._id;
-            FilterDefinition<Admin> filter = Builders<Admin>.Filter.Eq("_id", toUpdate._id);
-            AdminCollection.FindOneAndReplace(filter, account);
+            try
+            {
+
+                Admin toUpdate = Get(AdminToUpdate_ID);
+                if (toUpdate == null)
+                    return;
+                account._id = toUpdate._id;
+                FilterDefinition<Admin> filter = Builders<Admin>.Filter.Eq("_id", toUpdate._id);
+                account.Password = EncryptPassword.HashPassword(account.Password);  //Encrypt the password again
+                AdminCollection.FindOneAndReplace(filter, account);
+            }
+            catch
+            {
+                Console.WriteLine("An Exception occured!");
+
+            }
         }
     }
 
@@ -265,35 +358,54 @@ namespace Restaurant_Api.Services
         //Add a new
         public static Employee Add(Employee account)
         {
-            //Find if an account with the existing email already exists
-            FilterDefinition<Employee> filter = Builders<Employee>.Filter.Eq("EmailAddress", account.EmailAddress);
-            Employee result = EmployeeCollection.Find(filter).FirstOrDefault();
-            if (result != null)
+            try
             {
+                //Find if an account with the existing email already exists
+                FilterDefinition<Employee> filter = Builders<Employee>.Filter.Eq("EmailAddress", account.EmailAddress);
+                Employee result = EmployeeCollection.Find(filter).FirstOrDefault();
+                if (result != null)
+                {
+                    return null;
+                }
+                //Hash the password
+                account.Password = EncryptPassword.HashPassword(account.Password);
+                EmployeeCollection.InsertOne(account);
+                return result = EmployeeCollection.Find(filter).FirstOrDefault();
+            }
+            catch
+            {
+                Console.WriteLine("An Exception occured!");
                 return null;
             }
-            //Hash the password
-            account.Password = EncryptPassword.HashPassword(account.Password);
-            EmployeeCollection.InsertOne(account);
-            return result = EmployeeCollection.Find(filter).FirstOrDefault();
         }
 
         //Return an Employee from the database
         public static Employee Get(string id)
         {
-            ObjectId SearchId = new ObjectId(id);
-            FilterDefinition<Employee> filter = Builders<Employee>.Filter.Eq("_id", SearchId);
-            Employee result = EmployeeCollection.Find(filter).FirstOrDefault();
-            return result;
+            try
+            {
+
+                ObjectId SearchId = new ObjectId(id);
+                FilterDefinition<Employee> filter = Builders<Employee>.Filter.Eq("_id", SearchId);
+                Employee result = EmployeeCollection.Find(filter).FirstOrDefault();
+                return result;
+            }
+            catch
+            {
+                Console.WriteLine("An Exception occured!");
+                return null;
+
+            }
         }
         //Return an Employee from the database
         public static Employee Login(Login_Credential account)
         {
-            FilterDefinition<Employee> filter = Builders<Employee>.Filter.Eq("EmailAddress", account.EmailAddress);
-            if (filter == null)
-                return null;
             try
             {
+
+                FilterDefinition<Employee> filter = Builders<Employee>.Filter.Eq("EmailAddress", account.EmailAddress);
+                if (filter == null)
+                    return null;
                 Employee result = EmployeeCollection.Find(filter).FirstOrDefault();
                 if (result != null)
                 {
@@ -303,10 +415,17 @@ namespace Restaurant_Api.Services
                     }
                 }
                 return null;
+                
+                
             }
             catch (InvalidOperationException ex)
             {
                 Console.WriteLine("Inalid body response passed.");
+                return null;
+            }
+            catch
+            {
+                Console.WriteLine("An Exception occured!");
                 return null;
             }
 
@@ -314,32 +433,60 @@ namespace Restaurant_Api.Services
         //Get all the Employee in the database
         public static List<Employee> GetAll(string AdminId)
         {
-            Admin current = AdminServices.Get(AdminId);
-            if (current == null)
-                return new List<Employee>();
-            return EmployeeCollection.Find(_ => true).ToList();
+            try
+            {
+
+                Admin current = AdminServices.Get(AdminId);
+                if (current == null)
+                    return new List<Employee>();
+                return EmployeeCollection.Find(_ => true).ToList();
+            }
+            catch
+            {
+                Console.WriteLine("Inalid body response passed.");
+                return null;
+            }
         }
 
         //Remove an Employee from the database
         public static void Remove(string id)
         {
-            Employee toRemove = Get(id);
-            if (toRemove == null)
+            try
+            {
+
+                Employee toRemove = Get(id);
+                if (toRemove == null)
+                    return;
+                FilterDefinition<Employee> filter = Builders<Employee>.Filter.Eq("_id", toRemove._id);
+                EmployeeCollection.FindOneAndDelete(filter);
+            }
+            catch
+            {
+                Console.WriteLine("Inalid body response passed.");
                 return;
-            FilterDefinition<Employee> filter = Builders<Employee>.Filter.Eq("_id", toRemove._id);
-            EmployeeCollection.FindOneAndDelete(filter);
+            }
         }
 
         //Update a particular Employee account
         public static Employee Update(Employee account, string AccountoUpdate_ID)
         {
-            Employee toUpdate = Get(AccountoUpdate_ID);
-            if (toUpdate == null)
+            try
+            {
+
+                Employee toUpdate = Get(AccountoUpdate_ID);
+                if (toUpdate == null)
+                    return null;
+                account._id = toUpdate._id;
+                FilterDefinition<Employee> filter = Builders<Employee>.Filter.Eq("_id", toUpdate._id);
+                account.Password = EncryptPassword.HashPassword(account.Password);  //Encrypt the password again
+                EmployeeCollection.FindOneAndReplace(filter, account);
+                return account;
+            }
+            catch
+            {
+                Console.WriteLine("Inalid body response passed.");
                 return null;
-            account._id = toUpdate._id;
-            FilterDefinition<Employee> filter = Builders<Employee>.Filter.Eq("_id", toUpdate._id);
-            EmployeeCollection.FindOneAndReplace(filter, account);
-            return account;
+            }
         }
     }
 }
