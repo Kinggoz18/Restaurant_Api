@@ -18,7 +18,6 @@ using ConnectDatabase;
 using MongoDB.Driver;
 using MongoDB.Bson;
 using Restaurant_Api.Models;
-using ConnectDatabase;
 
 namespace Restaurant_Api.Services
 {
@@ -65,13 +64,6 @@ namespace Restaurant_Api.Services
             _orders.DeleteOne(order => order._id == id);
         }
     }
-    
-
-
-
-
-
-
     
 }
 

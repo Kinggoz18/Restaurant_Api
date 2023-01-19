@@ -18,17 +18,18 @@ using ConnectDatabase;
 using MongoDB.Driver;
 using MongoDB.Bson;
 using Restaurant_Api.Models;
+using System.Security.Cryptography;
 
 namespace Restaurant_Api.Services
 {
     //interface for all accounts
     public interface iAccountServices<T> where T : iAccount {
-        public static abstract List<T> GetAll(string AdminKey);
+        public static abstract List<T> GetAll(string AdminId);
         public static abstract T Login(T account);
-        public static abstract T Get(ObjectId account);
+        public static abstract T Get(string account);
         public static abstract void Add(T account);
         public static abstract void Update(T account);
-        public static abstract void Remove(ObjectId id);
+        public static abstract void Remove(string id);
     }
 
     //Customer Services
@@ -44,13 +45,18 @@ namespace Restaurant_Api.Services
         }
 
         //Get All the customers in the Database
-        public static List<Customer> GetAll(string AdminKey) {
+        public static List<Customer> GetAll(string AdminId) {
+            Admin current = AdminServices.Get(AdminId);
+            if (current == null)
+                return new List<Customer>();
+
             return CustomerCollection.Find(_ => true).ToList();
         }
         //Get a customer for a particular id
-        public static Customer Get(ObjectId id)
+        public static Customer Get(string id)
         {
-            FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("_id", id);
+            ObjectId SearchId = new ObjectId(id);
+            FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("_id", SearchId);
             Customer result = CustomerCollection.Find(filter).First();
             return result;
         }
@@ -66,7 +72,7 @@ namespace Restaurant_Api.Services
             CustomerCollection.InsertOne(account);
         }
         //Delete Customer
-        public static void Remove(ObjectId id)
+        public static void Remove(string id)
         {
             Customer toRemove = Get(id);
             if (toRemove == null)
@@ -77,7 +83,7 @@ namespace Restaurant_Api.Services
         //Update a customer
         public static void Update(Customer account)
         {
-            Customer toRemove = Get(account._id);
+            Customer toRemove = Get(account._id.ToString());
             if (toRemove == null)
                 return;
             FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("_id", account._id);
@@ -88,13 +94,13 @@ namespace Restaurant_Api.Services
     //Admin Services
     public class AdminServices
     {
-        static IMongoCollection<Admin>? AdminCollection;     //Admin collection
-        static ConnectDB? connection;
+        static ConnectDB connection  = new ConnectDB();
+        static IMongoCollection<Admin> AdminCollection = connection.Client.GetDatabase("Drum_Rock_Jerk").GetCollection<Admin>("Admin");    //Admin collection
        
         public AdminServices()
         {
-            connection = new ConnectDB();
-            AdminCollection = connection.Client.GetDatabase("Drum_Rock_Jerk").GetCollection<Admin>("Admin");
+            
+            
         }
         //Add a new Admin
         public static void Add(Admin account)
@@ -103,60 +109,74 @@ namespace Restaurant_Api.Services
         }
 
         //Return an admin from the database
-        public static Admin Get(ObjectId id)
+        public static Admin Get(string id)
         {
-            FilterDefinition<Admin> filter = Builders<Admin>.Filter.Eq("_id", id);
-            Admin result = AdminCollection.Find(filter).First();
+            ObjectId SearchId = new ObjectId(id);
+            FilterDefinition<Admin> filter = Builders<Admin>.Filter.Eq("_id", SearchId);
+            Admin result;
+            try
+            {
+                result = AdminCollection.Find(filter).First();
+            }
+            catch (InvalidOperationException ex)
+            {
+
+                Console.WriteLine("Inalid Admin ID passed.");
+                return null;
+            }
             return result;
+
         }
         //Return an admin from the database
-        public static Admin Login(Admin account)
+        public static Admin Login(Login_Credential account)
         {
             FilterDefinition<Admin> filter = Builders<Admin>.Filter.Eq("EmailAddress", account.EmailAddress);
+            if (filter == null)
+                return new Admin();
             Admin result = AdminCollection.Find(filter).First();
             return result;
         }
 
         //Get all the Admin in the database
-        public static List<Admin> GetAll(string AdminKey)
+        public static List<Admin> GetAll(string AdminId)
         {
-            //Check the admin key is in the database here
-
+            Admin current = AdminServices.Get(AdminId);
+            if (current == null)
+                return new List<Admin>();
             return AdminCollection.Find(_ => true).ToList();
         }
 
         //Remove any account from the database
-        public static void Remove(ObjectId id, string Adminkey)
+        public static void Remove(string id)
         {
             //Check the type of the account then remove it correctly !Implement
             Admin toRemove = Get(id);
             if (toRemove == null)
                 return;
-            FilterDefinition<Admin> filter = Builders<Admin>.Filter.Eq("_id", id);
+            FilterDefinition<Admin> filter = Builders<Admin>.Filter.Eq("_id", toRemove._id);;
             AdminCollection.FindOneAndDelete(filter);
         }
 
         //Update a particular admin account
-        public static void Update(Admin account, string Adminkey)
+        public static void Update(Admin account)
         {
-            Admin toRemove = Get(account._id);
-            if (toRemove == null)
+            Admin toUpdate = Get(account._id.ToString());
+            if (toUpdate == null)
                 return;
             FilterDefinition<Admin> filter = Builders<Admin>.Filter.Eq("_id", account._id);
-            AdminCollection.FindOneAndReplace(filter, account);
+            AdminCollection.FindOneAndReplace(filter, toUpdate);
         }
     }
 
     //Employee services
     public class EmployeeServices : iAccountServices<Employee>
     {
-        static IMongoCollection<Employee>? EmployeeCollection;   //Employee collection
-        static ConnectDB? connection;
+        static ConnectDB? connection = new ConnectDB();
+        static IMongoCollection<Employee>? EmployeeCollection = connection.Client.GetDatabase("Drum_Rock_Jerk").GetCollection<Employee>("Employee");   //Employee collection
 
         public EmployeeServices()
         {
-            connection = new ConnectDB();
-            EmployeeCollection = connection.Client.GetDatabase("Drum_Rock_Jerk").GetCollection<Employee>("Employee");
+
         }
 
         //Add a new
@@ -166,9 +186,10 @@ namespace Restaurant_Api.Services
         }
 
         //Return an Employee from the database
-        public static Employee Get(ObjectId id)
+        public static Employee Get(string id)
         {
-            FilterDefinition<Employee> filter = Builders<Employee>.Filter.Eq("_id", id);
+            ObjectId SearchId = new ObjectId(id);
+            FilterDefinition<Employee> filter = Builders<Employee>.Filter.Eq("_id", SearchId);
             Employee result = EmployeeCollection.Find(filter).First();
             return result;
         }
@@ -180,13 +201,16 @@ namespace Restaurant_Api.Services
             return result;
         }
         //Get all the Employee in the database
-        public static List<Employee> GetAll(string AdminKey)
+        public static List<Employee> GetAll(string AdminId)
         {
+            Admin current = AdminServices.Get(AdminId);
+            if (current == null)
+                return new List<Employee>();
             return EmployeeCollection.Find(_ => true).ToList();
         }
 
         //Remove an Employee from the database
-        public static void Remove(ObjectId id)
+        public static void Remove(string id)
         {
             Employee toRemove = Get(id);
             if (toRemove == null)
@@ -198,7 +222,7 @@ namespace Restaurant_Api.Services
         //Update a particular Employee account
         public static void Update(Employee account)
         {
-            Employee toRemove = Get(account._id);
+            Employee toRemove = Get(account._id.ToString());
             if (toRemove == null)
                 return;
             FilterDefinition<Employee> filter = Builders<Employee>.Filter.Eq("_id", account._id);
