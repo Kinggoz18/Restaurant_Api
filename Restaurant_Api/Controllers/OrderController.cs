@@ -57,7 +57,7 @@ namespace Restaurant_Api.Controllers
                 return NotFound();
             }
 
-            OrderServices.UpdateOrder(ObjectId.Parse(id), orderIn);
+            OrderServices.UpdateOrder(string id , orderIn);
             return NoContent();
         }
 

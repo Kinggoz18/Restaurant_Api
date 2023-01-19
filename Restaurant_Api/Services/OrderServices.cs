@@ -49,7 +49,7 @@ namespace Restaurant_Api.Services
             _orders.InsertOne(order);
         }
 
-        public static void UpdateOrder( Order orderIn, string orderId)
+        public static void UpdateOrder(string orderId, Order orderIn)
         {
             var filter = Builders<Order>.Filter.Eq("_id", orderId);
             var update = Builders<Order>.Update.Set("Items", orderIn.items)
