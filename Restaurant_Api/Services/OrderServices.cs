@@ -51,12 +51,33 @@ namespace Restaurant_Api.Services
 
         public static void UpdateOrder(string orderId, Order orderIn)
         {
-            var filter = Builders<Order>.Filter.Eq("_id", orderId);
-            var update = Builders<Order>.Update.Set("Items", orderIn.items)
-                                                .Set("Customer", orderIn.CustomerName)
-                                                .Set("Status", orderIn.status)
-                                                .Set("TotalPrice", orderIn.TotalPrice);
-            _orders.UpdateOne(filter, update);
+            
+        //    var filter = Builders<Order>.Filter.Eq("_id", orderId);
+        //    var update = Builders<Order>.Update;
+
+        //    //loop through the items list and find the item you want to update
+        //    foreach (var item in orderIn.items)
+        //    {
+        //        // Check if the item has an id and if it matches the id of the item you want to update
+        //        if (item._id != null && item._id == orderIn._id)
+        //        {
+        //            // Update the item name
+        //            update = update.Set("Items.$[i].Name", item.Name);
+        //            break;
+        //        }
+        //    }
+        //    update = null;
+
+        //   update  = update.Set("Items", orderIn.items)
+        //                                        .Set("Customer", orderIn.CustomerName)
+        //                                        .Set("Status", orderIn.status)
+        //                                        .Set("TotalPrice", orderIn.TotalPrice);
+        //    // Update the order
+        //    var options = new FindOneAndUpdateOptions<Order> { ArrayFilters = new
+        //        List<ArrayFilterDefinition> { new
+        //        BsonDocumentArrayFilterDefinition<BsonDocument>(new BsonDocument("i._id", orderIn._id)
+        //    } };
+        //    _orders.FindOneAndUpdate(filter, update, options);
         }
 
         public static void RemoveOrder(Order orderIn)
@@ -69,14 +90,20 @@ namespace Restaurant_Api.Services
         {
             _orders.DeleteOne(order => order._id == id);
         }
+
+
     }
-    
 
-
-
-
-
-
-    
+        
 }
+
+    
+
+
+
+
+
+
+    
+
 

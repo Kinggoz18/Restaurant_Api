@@ -50,14 +50,15 @@ namespace Restaurant_Api.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(string id, Order orderIn)
         {
-            var order = OrderServices.GetOrder(ObjectId.Parse(id));
+            var objectId = ObjectId.Parse(id);
+            var order = OrderServices.GetOrder(objectId);
 
             if (order == null)
             {
                 return NotFound();
             }
 
-            OrderServices.UpdateOrder(string id , orderIn);
+            OrderServices.UpdateOrder( id , orderIn);
             return NoContent();
         }
 
