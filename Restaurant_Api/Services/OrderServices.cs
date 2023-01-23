@@ -65,35 +65,24 @@ namespace Restaurant_Api.Services
         }
 
 
-        //public static Order UpdateOrder(string orderId, Order orderIn, string itemId, Item updatedItem)
-        //{
-        //    var filter = Builders<Order>.Filter.Eq("_id", new ObjectId(orderId));
-        //    var update = Builders<Order>.Update
-        //        .Set("CustomerName", orderIn.CustomerName)
-        //        .Set("PhoneNumber", orderIn.PhoneNumber)
-        //        .Set("orderdate", orderIn.orderdate)
-        //        .Set("status", orderIn.status)
-        //        .Set("TotalPrice", orderIn.TotalPrice);
 
-        //    //loop through the items list and find the item you want to update
-        //    foreach (var item in orderIn.items)
-        //    {
-        //        if (item._id == new ObjectId(itemId))
-        //        {
-        //            var arrayFilter = new BsonDocumentArrayFilterDefinition<BsonDocument>(new BsonDocument("i._id", item._id));
-        //            update = update.Combine(Builders<Order>.Update.Set("items.$[i].Name", updatedItem.Name))
-        //                           .Combine(Builders<Order>.Update.Set("items.$[i].Price", updatedItem.Price));
-        //            var options = new FindOneAndUpdateOptions<Order>
-        //            {
-        //                ArrayFilters = new List<ArrayFilterDefinition> { arrayFilter }
-        //            };
 
-        //            var updatedOrder = _orders.FindOneAndUpdate(filter, update, options);
-        //            return updatedOrder;
-        //        }
-        //    }
-        //    return null;
-        //}
+        ////returns all the orders 
+        public static List<Order> GetAllOrders()
+        {
+            var filter = Builders<Order>.Filter.Empty;
+            var orders = _orders.Find(filter).ToList();
+            return orders;
+        }
+
+
+        //gets order by users 
+        public static List<Order> GetOrdersByUser(string userName)
+        {
+            var filter = Builders<Order>.Filter.Eq("CustomerName", userName);
+            var orders = _orders.Find(filter).ToList();
+            return orders;
+        }
 
 
 

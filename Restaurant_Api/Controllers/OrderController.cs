@@ -62,6 +62,32 @@ namespace Restaurant_Api.Controllers
             return NoContent();
         }
 
+        [HttpGet]
+        [Route("GetAllCustomer/{AdminId}")]
+        public ActionResult<List<Order>> GetAllOrders()
+        {
+            var orders = OrderServices.GetAllOrders();
+            if (orders == null)
+            {
+                return NotFound();
+            }
+            return orders;
+        }
+
+        // GET api/orders/username
+        [HttpGet]
+        [Route("Getorders/{id}")]
+
+        public ActionResult<List<Order>> GetOrdersByUser(string userName)
+        {
+            var orders = OrderServices.GetOrdersByUser(userName);
+            if (orders == null)
+            {
+                return NotFound();
+            }
+            return orders;
+        }
+
         [HttpDelete("{id}")]
         public IActionResult Delete(string id)
         {
