@@ -92,10 +92,9 @@ namespace Restaurant_Api.Services
                 if (toRemove == null)
                     return;
                 //Remove the item from cloudinary
-                var deletionParams = new DeletionParams(toRemove.Name);
+                var PublicID = Path.Combine("MenuItem_Images", toRemove.Name);
+                var deletionParams = new DeletionParams(PublicID);
                 var result = cloudinary.Destroy(deletionParams);
-                Console.WriteLine(result.StatusCode);
-                Console.WriteLine(result.Error);
 
                 FilterDefinition<MenuItem> filter = Builders<MenuItem>.Filter.Eq("_id", toRemove._id);
                 MenuItemCollection.FindOneAndDelete(filter);
