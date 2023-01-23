@@ -29,6 +29,8 @@ namespace Restaurant_Api.Models
         public double? Price { get; set; }
         //Menu the item belongs to
         public string? Menu { get; set; }
+        //Menu Item image name
+        public string? ImageLink { get; set; }
     }
 }
 

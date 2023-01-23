@@ -195,6 +195,49 @@ namespace Restaurant_Api.Services
                 return null;
             }
         }
+        //Endpoint to update a customers point, after placing an order
+        public static Customer UpdatePoint(string AccountoUpdate_ID)
+        {
+            try
+            {
+                Customer accountToUpdate = Get(AccountoUpdate_ID);
+                FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("_id", accountToUpdate._id);
+                var update = Builders<Customer>.Update.Set("Points", accountToUpdate.Points + 10);  //Increment points by 10
+                CustomerCollection.UpdateOne(filter, update);
+                return accountToUpdate;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return null;
+            }
+        }
+
+        //Endpoint to consume customers point
+        public static Customer UsePoints(string AccountoUpdate_ID)
+        {
+            try
+            {
+                Customer accountToUpdate = Get(AccountoUpdate_ID);
+                FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("_id", accountToUpdate._id);
+                if(accountToUpdate.Points >= 50) {
+                    var update = Builders<Customer>.Update.Set("Points", accountToUpdate.Points - 50);  //Remove 50 points from the account
+                    CustomerCollection.UpdateOne(filter, update);
+                    return accountToUpdate;
+                }
+                else
+                {
+                    return accountToUpdate;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return null;
+            }
+        }
+
     }
 
     //Admin Services
