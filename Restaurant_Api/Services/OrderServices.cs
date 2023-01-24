@@ -18,7 +18,6 @@ using ConnectDatabase;
 using MongoDB.Driver;
 using MongoDB.Bson;
 using Restaurant_Api.Models;
-using ConnectDatabase;
 using System.Collections.ObjectModel;
 
 namespace Restaurant_Api.Services
