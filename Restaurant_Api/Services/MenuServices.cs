@@ -14,6 +14,7 @@
 | ------------------------------------------------------------------
 */
 using System;
+using CloudinaryDotNet;
 using ConnectDatabase;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -23,20 +24,34 @@ namespace Restaurant_Api.Services
 {
     public class MenuServices
     {
-        static IMongoCollection<Menu>? MenuCollection;   //Menu collection
-        static ConnectDB? connection;
+
+        static ConnectDB? connection = new ConnectDB();
+        static IMongoCollection<Menu>? MenuCollection = connection.Client.GetDatabase("Drum_Rock_Jerk").GetCollection<Menu>("Menu");
 
         public MenuServices()
         {
-            connection = new ConnectDB();
-            MenuCollection = connection.Client.GetDatabase("Drum_Rock_Jerk").GetCollection<Menu>("Menu");
+            List<BsonDocument> pipeline = new List<BsonDocument>
+            {
+                new BsonDocument("$lookup",
+                new BsonDocument
+                {
+                    { "from", "menuItems" },
+                    { "localField", "FoodList" },
+                    { "foreignField", "_id" },
+                    { "as", "menuItems" },
+                }
+            )
+            };
 
+            IAsyncCursor<Menu> cursor = MenuCollection.Aggregate<Menu>(pipeline);
+            List<Menu> menusWithItems = cursor.ToList();
         }
 
         public static List<Menu> GetAllMenu()
         {
             return MenuCollection.Find(_ => true).ToList();
         }
+        
 
         public static Menu Get(object id)
         {
@@ -54,7 +69,7 @@ namespace Restaurant_Api.Services
             MenuCollection.FindOneAndDelete(filter);
         }
 
-        public static void updateMenu(Menu account)
+        public static void UpdateMenu(Menu account)
         {
             //var index = MenuCollection.FindI(p => p.Id == id.Id);
             //if(index == -1)
@@ -69,9 +84,9 @@ namespace Restaurant_Api.Services
 
 
         }
-        public static void Add(Menu account)
+        public static void Add(Menu menu)
         {
-            MenuCollection.InsertOne(account);
+            MenuCollection.InsertOne(menu);
         }
     }
 }
