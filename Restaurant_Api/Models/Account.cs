@@ -44,11 +44,12 @@ namespace Restaurant_Api.Models
         public string? Password { get; set; }
         //The user points accumulated
         public int Points { get; set; }
-        //A list of the users payments
-        public List<PaypalPayment>? payments { get; set; }
+        //A list of the users reviews
+        public List<Review>? Reviews { get; set; }
         //A list of the users past orders
         public List<Order>? PastOrders { get; set; }
-
+        //A list of the users payments
+        public List<PaypalPayment>? PayPal_Credntials { get; set; }
     }
     public class Admin : iAccount
     {
