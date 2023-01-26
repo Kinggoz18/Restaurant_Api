@@ -25,7 +25,7 @@ namespace Restaurant_Api.Services
     public class SalesServices{
         static ConnectDB? connection = new ConnectDB();
         static IMongoCollection<Sales>? SalesCollection = connection.Client.GetDatabase("Drum_Rock_Jerk").GetCollection<Sales>("Sales");
-         static IMongoCollection<Order>? OrderCollection = connection.Client.GetDatabase("Drum_Rock_Jerk").GetCollection<Sales>("Orde");
+        static IMongoCollection<Order>? OrderCollection = connection.Client.GetDatabase("Drum_Rock_Jerk").GetCollection<Order>("Order");
 
         public SalesServices()
         {
@@ -36,7 +36,7 @@ namespace Restaurant_Api.Services
         {
             var orders = OrderCollection.Find(new BsonDocument()).ToList();
             double totalSales = 0;
-            foreach (var Order in Order)
+            foreach (var Order in orders)
             {
                 totalSales += Order.TotalPrice;
             }

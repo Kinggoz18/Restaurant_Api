@@ -1,5 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
+using Restaurant_Api.Services;
+
 namespace Restaurant_Api.Controllers
 {
     [ApiController]
@@ -9,14 +11,13 @@ namespace Restaurant_Api.Controllers
         public SalesController()
         {
 
-            [HttpGet]
-            public ActionResult<double> GetTotalSales()
-            {
-                var orders = OrderServices.GetAllOrders();
-                var totalSales = orders.Sum(x => x.TotalPrice);
-                return Ok(totalSales);
-            }
-
+        }
+        [HttpGet]
+        public ActionResult<double> GetTotalSales()
+        {
+            var orders = OrderServices.GetAllOrders();
+            var totalSales = orders.Sum(x => x.TotalPrice);
+            return Ok(totalSales);
         }
     }
 }
