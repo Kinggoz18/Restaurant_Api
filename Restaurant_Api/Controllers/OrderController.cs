@@ -18,12 +18,14 @@ namespace Restaurant_Api.Controllers
         }
 
         [HttpGet]
+        [Route("GetAllOrder")]
         public List<Order> Get()
         {
             return OrderServices.GetallOrder();
         }
 
-        [HttpGet("{id}")]
+        [HttpGet]
+        [Route("GetOrder")]//returns a particlar users order
         public ActionResult<Order> Get(string id)
         {
             var order = OrderServices.GetOrder(ObjectId.Parse(id));
@@ -42,28 +44,18 @@ namespace Restaurant_Api.Controllers
         
 
         [HttpPost]
+        [Route("CreateOrder/")]
         public void Create(Order order)
         {
             OrderServices.CreateOrder(order);
         }
 
-        [HttpPut("{id}")]
-        public IActionResult Update(string id, Order orderIn)
-        {
-            var objectId = ObjectId.Parse(id);
-            var order = OrderServices.GetOrder(objectId);
-
-            if (order == null)
-            {
-                return NotFound();
-            }
-
-            OrderServices.UpdateOrder( id , orderIn);
-            return NoContent();
-        }
+        [HttpPut]
+        [Route("UpdateOrder/")]
+        public ActionResult<Order> Update(string id, Order orderIn) => OrderServices.UpdateOrder( id , orderIn);
 
         [HttpGet]
-        [Route("GetAllCustomer/{AdminId}")]
+        [Route("GetAllUsers/{AdminId}")]
         public ActionResult<List<Order>> GetAllOrders()
         {
             var orders = OrderServices.GetAllOrders();
@@ -89,6 +81,7 @@ namespace Restaurant_Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        
         public IActionResult Delete(string id)
         {
             var order = OrderServices.GetOrder(ObjectId.Parse(id));

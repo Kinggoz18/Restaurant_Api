@@ -19,6 +19,7 @@ using MongoDB.Driver;
 using MongoDB.Bson;
 using Restaurant_Api.Models;
 using System.Collections.ObjectModel;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Restaurant_Api.Services
 {
@@ -50,7 +51,14 @@ namespace Restaurant_Api.Services
 
         public static Order UpdateOrder(string orderId, Order orderIn)
         {
-            var filter = Builders<Order>.Filter.Eq("_id", new ObjectId(orderId));
+            var objectId = new ObjectId(orderId);
+            var order = OrderServices.GetOrder(objectId);
+            if (order == null)
+            {
+                return null;
+            }
+
+            var filter = Builders<Order>.Filter.Eq("_id", objectId);
             var update = Builders<Order>.Update
                 .Set("CustomerName", orderIn.CustomerName)
                 .Set("PhoneNumber", orderIn.PhoneNumber)
