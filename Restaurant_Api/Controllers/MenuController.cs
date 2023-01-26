@@ -6,7 +6,7 @@ using Restaurant_Api.Services;
 
 namespace Restaurant_Api.Controllers
 {
-    [Route("Menu/api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class MenuController : ControllerBase
     {
@@ -18,54 +18,58 @@ namespace Restaurant_Api.Controllers
         }
 
         // GET: api/Menu
-        [HttpGet]
+        [HttpGet("GetallMenu/{GetallMenu}")]
         public IEnumerable<Menu> GetAllMenu()
         {
             return MenuServices.GetAllMenu();
         }
 
         // GET: api/Menu/5
-        [HttpGet("{GetMenu}")]
-        public ActionResult<Menu> GetMenu(string id)
+        [HttpGet("GetMenu/{GetMenu}")]
+        /*public ActionResult<Menu> Get(string id)
         {
-            var menu = MenuServices.Get(new ObjectId(id));
+            var menu = MenuServices.Get(id);
             if (menu == null)
-            {
                 return NotFound();
-            }
             return menu;
+        }*/
+        public ActionResult<Menu> Get(string id)
+        {
+            return MenuServices.Get(id);
         }
 
+
         // POST: api/Menu
-        [HttpPost]
-        public ActionResult<Menu> CreateMenu(Menu menu)
+        [HttpPost("addMenu/{addMenu}")]
+        public void CreateMenu(Menu menu)
         {
             MenuServices.Add(menu);
-            return CreatedAtAction("GetMenu", new { id = menu._id.ToString() }, menu);
         }
 
         // PUT: api/Menu/5
-        [HttpPut("{UpdateMenu}")]
-        public IActionResult UpdateMenu(string id, Menu menu)
+        [HttpPut("UpdateMenu/{UpdateMenu}")]
+        /* public ActionResult<Menu> UpdateMenu(string id, Menu newMenu)
+         {
+             var menu = MenuServices.Get(id);
+             if (menu == null)
+                 return NotFound();
+             MenuServices.UpdateMenu(id, newMenu);
+             return newMenu;
+         }*/
+        public ActionResult<Menu> Update(string id, Menu newMenu)
         {
-            if (id != menu._id.ToString())
-            {
-                return BadRequest();
-            }
-            MenuServices.UpdateMenu(menu);
-            return NoContent();
+            MenuServices.UpdateMenu(id, newMenu);
+            return newMenu;
         }
 
         // DELETE: api/Menu/5
-        [HttpDelete("{DeleteMneu}")]
-        public ActionResult<Menu> DeleteMenu(string id)
+        [HttpDelete("DeleteMenu/{DeleteMneu}")]
+        public ActionResult<Menu> Delete(string id)
         {
-            var menu = MenuServices.Get(new ObjectId(id));
+            var menu = MenuServices.Get(id);
             if (menu == null)
-            {
                 return NotFound();
-            }
-            MenuServices.Delete(new ObjectId(id));
+            MenuServices.Delete(id);
             return menu;
         }
     }
