@@ -38,8 +38,9 @@ namespace Restaurant_Api.Services
         }
 
         //get all reviews by id
-        public static List<Review> GetReviewsByUser(string userName){
-            var filter = Builders<Review>.Filter.Eq("CustomerName", userName);
+        public static List<Review> GetReviewsByUser(string Userid)
+        {
+            var filter = Builders<Review>.Filter.Eq("UserId", Userid);
             var reviews = _review.Find(filter).ToList();
 
             return reviews;
