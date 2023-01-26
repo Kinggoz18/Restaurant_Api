@@ -6,7 +6,7 @@ using Restaurant_Api.Services;
 
 namespace Restaurant_Api.Controllers
 {
-    [Route("Menu/api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class MenuController : ControllerBase
     {
@@ -18,14 +18,14 @@ namespace Restaurant_Api.Controllers
         }
 
         // GET: api/Menu
-        [HttpGet]
+        [HttpGet("GetallMenu/{GetallMenu}")]
         public IEnumerable<Menu> GetAllMenu()
         {
             return MenuServices.GetAllMenu();
         }
 
         // GET: api/Menu/5
-        [HttpGet("{GetMenu}")]
+        [HttpGet("GetMenu/{GetMenu}")]
         /*public ActionResult<Menu> Get(string id)
         {
             var menu = MenuServices.Get(id);
@@ -40,14 +40,14 @@ namespace Restaurant_Api.Controllers
 
 
         // POST: api/Menu
-        [HttpPost]
+        [HttpPost("addMenu/{addMenu}")]
         public void CreateMenu(Menu menu)
         {
             MenuServices.Add(menu);
         }
 
         // PUT: api/Menu/5
-        [HttpPut("{UpdateMenu}")]
+        [HttpPut("UpdateMenu/{UpdateMenu}")]
         /* public ActionResult<Menu> UpdateMenu(string id, Menu newMenu)
          {
              var menu = MenuServices.Get(id);
@@ -63,7 +63,7 @@ namespace Restaurant_Api.Controllers
         }
 
         // DELETE: api/Menu/5
-        [HttpDelete("{DeleteMneu}")]
+        [HttpDelete("DeleteMenu/{DeleteMneu}")]
         public ActionResult<Menu> Delete(string id)
         {
             var menu = MenuServices.Get(id);
