@@ -17,28 +17,15 @@ namespace Restaurant_Api.Controllers
 
         }
 
-        [HttpGet]
-        public static  List<Review> Get()
-        {
-            return ReviewServices.GetallReviews();
-        }
+       
+   
 
-        [HttpGet("{id}")]
-        public ActionResult<Review> Get(string id)
-        {
-            var review = ReviewServices.GetReview(ObjectId.Parse(id));
-
-            if (review == null)
-            {
-                return NotFound();
-            }
-
-            return review;
-        }
+       
 
 
 
         [HttpPost]
+        [Route("Create Reviews")]
         public void Create(Review review)
         {
             ReviewServices.CreateReview(review);
@@ -60,11 +47,11 @@ namespace Restaurant_Api.Controllers
 
         // GET api/reviews/username
         [HttpGet]
-        [Route("GetReviews/{id}")]
+        [Route("GetReviews/{Userid}")]
 
-        public ActionResult<List<Review>> GetReviewsByUser(string userName)
+        public ActionResult<List<Review>> GetReviewsByUser(string Userid )
         {
-            var reviews = ReviewServices.GetReviewsByUser(userName);
+            var reviews = ReviewServices.GetReviewsByUser(Userid);
             if (reviews == null)
             {
                 return NotFound();
@@ -72,7 +59,8 @@ namespace Restaurant_Api.Controllers
             return reviews;
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete]
+        [Route("Delete")]
         public IActionResult Delete(string id)
         {
             var review = ReviewServices.GetReview(ObjectId.Parse(id));
