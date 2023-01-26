@@ -25,7 +25,7 @@ namespace Restaurant_Api.Controllers
 
 
         [HttpPost]
-        [Route("Create Reviews")]
+        [Route("CreateReviews")]
         public void Create(Review review)
         {
             ReviewServices.CreateReview(review);

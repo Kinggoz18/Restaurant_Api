@@ -68,7 +68,7 @@ namespace Restaurant_Api.Controllers
 
         // GET api/orders/username
         [HttpGet]
-        [Route("Getorders/{id}")]
+        [Route("GetOrders/{id}")]
 
         public ActionResult<List<Order>> GetOrdersByUser(string userName)
         {
