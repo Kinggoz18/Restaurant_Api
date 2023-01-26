@@ -17,12 +17,7 @@ namespace Restaurant_Api.Controllers
 
         }
 
-        [HttpGet]
-        [Route("GetAllOrder")]
-        public List<Order> Get()
-        {
-            return OrderServices.GetallOrder();
-        }
+        
 
         [HttpGet]
         [Route("GetOrder")]//returns a particlar users order
@@ -80,18 +75,18 @@ namespace Restaurant_Api.Controllers
             return orders;
         }
 
-        [HttpDelete("{id}")]
-        
-        public IActionResult Delete(string id)
+        [HttpDelete]
+        [Route("delete/{id}")]
+        public IActionResult Delete(string Userid)
         {
-            var order = OrderServices.GetOrder(ObjectId.Parse(id));
+            var order = OrderServices.GetOrder(ObjectId.Parse(Userid));
 
             if (order == null)
             {
                 return NotFound();
             }
 
-            OrderServices.RemoveOrder(ObjectId.Parse(id));
+            OrderServices.RemoveOrder(ObjectId.Parse(Userid));
             return NoContent();
         }
     }
