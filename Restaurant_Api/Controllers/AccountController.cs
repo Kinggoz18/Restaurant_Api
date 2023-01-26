@@ -47,7 +47,7 @@ namespace Restaurant_Api.Controllers
 
         //Endpoint to delete any account from the database
         [HttpDelete]
-        [Route("DeleteAdmin/{id}")]
+        [Route("DeleteAdmin/")]
         public void DeleteAccount(string id) => AdminServices.Remove(id);
 
         //Endpoint to update a particular admin account
