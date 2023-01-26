@@ -9,6 +9,14 @@ namespace Restaurant_Api.Controllers
         public SalesController()
         {
 
+            [HttpGet]
+            public ActionResult<double> GetTotalSales()
+            {
+                var orders = OrderServices.GetAllOrders();
+                var totalSales = orders.Sum(x => x.TotalPrice);
+                return Ok(totalSales);
+            }
+
         }
     }
 }
