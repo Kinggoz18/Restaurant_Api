@@ -30,7 +30,7 @@ namespace Restaurant_Api.Services
 
         public MenuServices()
         {
-            List<BsonDocument> pipeline = new List<BsonDocument>
+            /*List<BsonDocument> pipeline = new List<BsonDocument>
             {
                 new BsonDocument("$lookup",
                 new BsonDocument
@@ -44,7 +44,7 @@ namespace Restaurant_Api.Services
             };
 
             IAsyncCursor<Menu> cursor = MenuCollection.Aggregate<Menu>(pipeline);
-            List<Menu> menusWithItems = cursor.ToList();
+            List<Menu> menusWithItems = cursor.ToList();*/
         }
 
         public static List<Menu> GetAllMenu()
@@ -53,14 +53,23 @@ namespace Restaurant_Api.Services
         }
         
 
-        public static Menu Get(object id)
+        public static Menu Get(string id)
         {
-            FilterDefinition<Menu> filter = Builders<Menu>.Filter.Eq("_id", id);
-            Menu result = MenuCollection.Find(filter).First();
-            return result;
+            try
+            {
+                FilterDefinition<Menu> filter = Builders<Menu>.Filter.Eq("_id", id);
+                Menu result = MenuCollection.Find(filter).FirstOrDefault();
+                return result;
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return null;
+            }
         }
 
-        public static void Delete(object id)
+        public static void Delete(string id)
         {
             Menu toRemove = Get(id);
             if (toRemove == null)
@@ -69,24 +78,25 @@ namespace Restaurant_Api.Services
             MenuCollection.FindOneAndDelete(filter);
         }
 
-        public static void UpdateMenu(Menu account)
+        public static void UpdateMenu(string id, Menu newMenu)
         {
             //var index = MenuCollection.FindI(p => p.Id == id.Id);
             //if(index == -1)
             //  return;
 
             //object[index] = id;
-            Menu toRemove = Get(account._id);
-            if (toRemove == null)
+            Menu toUpdate = Get(id);
+            if (toUpdate == null)
                 return;
-            FilterDefinition<Menu> filter = Builders<Menu>.Filter.Eq("_id", account._id);
-            MenuCollection.FindOneAndReplace(filter, account);
-
-
+            FilterDefinition<Menu> filter = Builders<Menu>.Filter.Eq("_id", toUpdate._id);
+            newMenu._id = toUpdate._id;                 //Keep the old id
+            MenuCollection.FindOneAndReplace(filter, newMenu);
         }
-        public static void Add(Menu menu)
+
+        public static Menu Add(Menu newMenu)
         {
-            MenuCollection.InsertOne(menu);
+            MenuCollection.InsertOne(newMenu);
+            return newMenu;
         }
     }
 }
