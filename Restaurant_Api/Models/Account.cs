@@ -49,7 +49,7 @@ namespace Restaurant_Api.Models
         //A list of the users past orders
         public List<Order>? PastOrders { get; set; }
         //A list of the users payments
-        public List<PaypalPayment>? PayPal_Credntials { get; set; }
+        //public List<PaypalPayment>? PayPal_Credntials { get; set; }
     }
     public class Admin : iAccount
     {
