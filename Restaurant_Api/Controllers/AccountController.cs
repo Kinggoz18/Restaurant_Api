@@ -33,7 +33,7 @@ namespace Restaurant_Api.Controllers
         //Endpoint to fetch all accounts from the database
         [HttpGet]
         [Route("GetAllAdmin/{AdminId}")]
-        public ActionResult<List<Admin>> GetAllAccount(string adminId) => AdminServices.GetAll(AdminId);
+        public ActionResult<List<Admin>> GetAllAccount(string adminId) => AdminServices.GetAll(adminId);
 
         //Endpoint to login in an account
         [HttpPost]
@@ -53,7 +53,7 @@ namespace Restaurant_Api.Controllers
         //Endpoint to update a particular admin account
         [HttpPut]
         [Route("UpdateAdmin/")]
-        public void UpdateAccount(Admin account, string adminToUpdate_ID) => AdminServices.Update(account, AdminToUpdate_ID);
+        public void UpdateAccount(Admin account, string adminToUpdate_ID) => AdminServices.Update(account, adminToUpdate_ID);
 
         //Endpoint to add a new Admin
         [HttpPost]
