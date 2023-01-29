@@ -33,7 +33,7 @@ namespace Restaurant_Api.Controllers
         //Endpoint to fetch all accounts from the database
         [HttpGet]
         [Route("GetAllAdmin/{AdminId}")]
-        public ActionResult<List<Admin>> GetAllAccount(string adminId) => AdminServices.GetAll(adminId);
+        public ActionResult<List<Admin>> GetAllAccount(Admin adminId) => AdminServices.GetAll(adminId);
 
         //Endpoint to login in an account
         [HttpPost]
@@ -43,17 +43,17 @@ namespace Restaurant_Api.Controllers
         //Endpoint to get a particular account details
         [HttpGet]
         [Route("GetAdmin/{id}")]
-        public ActionResult<Admin> Get(string id) => AdminServices.Get(id);
+        public ActionResult<Admin> Get(ObjectId id) => AdminServices.Get(id);
 
         //Endpoint to delete any account from the database
         [HttpDelete]
         [Route("DeleteAdmin/")]
-        public void DeleteAccount(string id) => AdminServices.Remove(id);
+        public void DeleteAccount(Admin account) => AdminServices.Remove(account);
 
         //Endpoint to update a particular admin account
         [HttpPut]
         [Route("UpdateAdmin/")]
-        public void UpdateAccount(Admin account, string adminToUpdate_ID) => AdminServices.Update(account, adminToUpdate_ID);
+        public void UpdateAccount(Admin account) => AdminServices.Update(account);
 
         //Endpoint to add a new Admin
         [HttpPost]
@@ -73,7 +73,7 @@ namespace Restaurant_Api.Controllers
         //Endpoint to fetch all accounts from the database
         [HttpGet]
         [Route("GetAllCustomer/{AdminId}")]
-        public ActionResult<List<Customer>> GetAllAccount(string AdminId) => CustomerServices.GetAll(AdminId);
+        public ActionResult<List<Customer>> GetAllAccount(Admin admin) => CustomerServices.GetAll(admin);
 
         //Endpoint to login in an account
         [HttpPost]
@@ -83,17 +83,17 @@ namespace Restaurant_Api.Controllers
         //Endpoint to get a particular account details
         [HttpGet]
         [Route("GetCustomer/{id}")]
-        public ActionResult<iAccount> Get(string id) => CustomerServices.Get(id);
+        public ActionResult<iAccount> Get(ObjectId id) => CustomerServices.Get(id);
 
         //Endpoint to delete any account from the database
         [HttpDelete]
         [Route("DeleteCustomer/")]
-        public void DeleteAccount(string id) => CustomerServices.Remove(id);
+        public void DeleteAccount(Customer account) => CustomerServices.Remove(account);
 
         //Endpoint to update a particular admin account
         [HttpPut]
         [Route("UpdateCustomer/")]
-        public ActionResult<Customer> UpdateAccount(Customer account, string AccountoUpdate_ID) => CustomerServices.Update(account, AccountoUpdate_ID);
+        public ActionResult<Customer> UpdateAccount(Customer account) => CustomerServices.Update(account);
 
         //Endpoint to add a new Admin
         [HttpPost]
@@ -113,7 +113,7 @@ namespace Restaurant_Api.Controllers
         //Endpoint to fetch all accounts from the database
         [HttpGet]
         [Route("GetAllEmployee/{AdminId}")]
-        public ActionResult<List<Employee>> GetAllAccount(string AdminId) => EmployeeServices.GetAll(AdminId);
+        public ActionResult<List<Employee>> GetAllAccount(Admin admin) => EmployeeServices.GetAll(admin);
 
         //Endpoint to login in an account
         [HttpPost]
@@ -123,17 +123,17 @@ namespace Restaurant_Api.Controllers
         //Endpoint to get a particular account details
         [HttpGet]
         [Route("GetEmployee/{id}")]
-        public ActionResult<iAccount> Get(string id) => EmployeeServices.Get(id);
+        public ActionResult<iAccount> Get(ObjectId id) => EmployeeServices.Get(id);
 
         //Endpoint to delete any account from the database
         [HttpDelete]
         [Route("DeleteEmployee/")]
-        public void DeleteAccount(string id) => EmployeeServices.Remove(id);
+        public void DeleteAccount(Employee account) => EmployeeServices.Remove(account);
 
         //Endpoint to update a particular Employee account
         [HttpPut]
         [Route("UpdateEmployee/")]
-        public ActionResult<Employee> UpdateAccount(Employee account, string AccountoUpdate_ID) => EmployeeServices.Update(account, AccountoUpdate_ID);
+        public ActionResult<Employee> UpdateAccount(Employee account) => EmployeeServices.Update(account);
 
         //Endpoint to add a Employee Admin
         [HttpPost]

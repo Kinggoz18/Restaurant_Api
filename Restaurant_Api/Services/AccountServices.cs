@@ -26,12 +26,12 @@ namespace Restaurant_Api.Services
 {
     //interface for all accounts
     public interface iAccountServices<T> where T : iAccount {
-        public static abstract List<T> GetAll(string AdminId);
+        public static abstract List<T> GetAll(Admin AdminId);
         public static abstract T Login(Login_Credential account);
-        public static abstract T Get(string account);
+        public static abstract T Get(ObjectId account);
         public static abstract T Add(T account);
-        public static abstract T Update(T account, string AccountoUpdate_ID);
-        public static abstract void Remove(string id);
+        public static abstract T Update(T account);
+        public static abstract void Remove(T id);
     }
     //Class for hashing users passwords
     public class EncryptPassword
@@ -68,11 +68,10 @@ namespace Restaurant_Api.Services
         }
 
         //Get All the customers in the Database
-        public static List<Customer> GetAll(string AdminId) {
+        public static List<Customer> GetAll(Admin AdminId) {
             try
             {
-
-                Admin current = AdminServices.Get(AdminId);
+                Admin current = AdminServices.Get(AdminId._id);
                 if (current == null)
                     return new List<Customer>();
 
@@ -85,13 +84,11 @@ namespace Restaurant_Api.Services
             }
         }
         //Get a customer for a particular id
-        public static Customer Get(string id)
+        public static Customer Get(ObjectId id)
         {
             try
             {
-
-                ObjectId SearchId = new ObjectId(id);
-                FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("_id", SearchId);
+                FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("_id", id);
                 Customer result = CustomerCollection.Find(filter).FirstOrDefault();
                 return result;
             }
@@ -157,12 +154,12 @@ namespace Restaurant_Api.Services
             }
         }
         //Delete Customer
-        public static void Remove(string id)
+        public static void Remove(Customer account)
         {
             try
             {
 
-                Customer toRemove = Get(id);
+                Customer toRemove = Get(account._id);
                 if (toRemove == null)
                     return;
                 FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("_id", toRemove._id);
@@ -175,12 +172,11 @@ namespace Restaurant_Api.Services
             }
         }
         //Update a customer
-        public static Customer Update(Customer account, string AccountoUpdate_ID)
+        public static Customer Update(Customer account)
         {
             try
             {
-
-                Customer toUpdate = Get(AccountoUpdate_ID);
+                Customer toUpdate = Get(account._id);
                 if (toUpdate == null)
                     return null;
                 account._id = toUpdate._id;
@@ -196,11 +192,11 @@ namespace Restaurant_Api.Services
             }
         }
         //Endpoint to update a customers point, after placing an order
-        public static Customer UpdatePoint(string AccountoUpdate_ID)
+        public static Customer UpdatePoint(Customer account)
         {
             try
             {
-                Customer accountToUpdate = Get(AccountoUpdate_ID);
+                Customer accountToUpdate = Get(account._id);
                 FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("_id", accountToUpdate._id);
                 var update = Builders<Customer>.Update.Set("Points", accountToUpdate.Points + 10);  //Increment points by 10
                 CustomerCollection.UpdateOne(filter, update);
@@ -214,11 +210,11 @@ namespace Restaurant_Api.Services
         }
 
         //Endpoint to consume customers point
-        public static Customer UsePoints(string AccountoUpdate_ID)
+        public static Customer UsePoints(Customer account)
         {
             try
             {
-                Customer accountToUpdate = Get(AccountoUpdate_ID);
+                Customer accountToUpdate = Get(account._id);
                 FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("_id", accountToUpdate._id);
                 if(accountToUpdate.Points >= 50) {
                     var update = Builders<Customer>.Update.Set("Points", accountToUpdate.Points - 50);  //Remove 50 points from the account
@@ -276,12 +272,11 @@ namespace Restaurant_Api.Services
         }
 
         //Return an admin from the database
-        public static Admin Get(string id)
+        public static Admin Get(ObjectId id)
         {
             try
             {
-                ObjectId SearchId = new ObjectId(id);
-                FilterDefinition<Admin> filter = Builders<Admin>.Filter.Eq("_id", SearchId);
+                FilterDefinition<Admin> filter = Builders<Admin>.Filter.Eq("_id", id);
                 Admin result;
                 result = AdminCollection.Find(filter).FirstOrDefault();
                 return result;
@@ -329,12 +324,11 @@ namespace Restaurant_Api.Services
         }
 
         //Get all the Admin in the database
-        public static List<Admin> GetAll(string AdminId)
+        public static List<Admin> GetAll(Admin AdminId)
         {
             try
             {
-
-                Admin current = AdminServices.Get(AdminId);
+                Admin current = AdminServices.Get(AdminId._id);
                 if (current == null)
                     return new List<Admin>();
                 return AdminCollection.Find(_ => true).ToList();
@@ -347,12 +341,12 @@ namespace Restaurant_Api.Services
         }
 
         //Remove any account from the database
-        public static void Remove(string id)
+        public static void Remove(Admin account)
         {
             try
             {
                  //Check the type of the account then remove it correctly !Implement
-                Admin toRemove = Get(id);
+                Admin toRemove = Get(account._id);
                 if (toRemove == null)
                     return;
                 FilterDefinition<Admin> filter = Builders<Admin>.Filter.Eq("_id", toRemove._id); ;
@@ -366,12 +360,12 @@ namespace Restaurant_Api.Services
         }
 
         //Update a particular admin account
-        public static void Update(Admin account, string AdminToUpdate_ID)
+        public static void Update(Admin account)
         {
             try
             {
 
-                Admin toUpdate = Get(AdminToUpdate_ID);
+                Admin toUpdate = Get(account._id);
                 if (toUpdate == null)
                     return;
                 account._id = toUpdate._id;
@@ -423,13 +417,12 @@ namespace Restaurant_Api.Services
         }
 
         //Return an Employee from the database
-        public static Employee Get(string id)
+        public static Employee Get(ObjectId id)
         {
             try
             {
 
-                ObjectId SearchId = new ObjectId(id);
-                FilterDefinition<Employee> filter = Builders<Employee>.Filter.Eq("_id", SearchId);
+                FilterDefinition<Employee> filter = Builders<Employee>.Filter.Eq("_id", id);
                 Employee result = EmployeeCollection.Find(filter).FirstOrDefault();
                 return result;
             }
@@ -474,12 +467,11 @@ namespace Restaurant_Api.Services
 
         }
         //Get all the Employee in the database
-        public static List<Employee> GetAll(string AdminId)
+        public static List<Employee> GetAll(Admin account)
         {
             try
             {
-
-                Admin current = AdminServices.Get(AdminId);
+                Admin current = AdminServices.Get(account._id);
                 if (current == null)
                     return new List<Employee>();
                 return EmployeeCollection.Find(_ => true).ToList();
@@ -492,12 +484,11 @@ namespace Restaurant_Api.Services
         }
 
         //Remove an Employee from the database
-        public static void Remove(string id)
+        public static void Remove(Employee account)
         {
             try
             {
-
-                Employee toRemove = Get(id);
+                Employee toRemove = Get(account._id);
                 if (toRemove == null)
                     return;
                 FilterDefinition<Employee> filter = Builders<Employee>.Filter.Eq("_id", toRemove._id);
@@ -511,12 +502,12 @@ namespace Restaurant_Api.Services
         }
 
         //Update a particular Employee account
-        public static Employee Update(Employee account, string AccountoUpdate_ID)
+        public static Employee Update(Employee account)
         {
             try
             {
 
-                Employee toUpdate = Get(AccountoUpdate_ID);
+                Employee toUpdate = Get(account._id);
                 if (toUpdate == null)
                     return null;
                 account._id = toUpdate._id;
