@@ -368,7 +368,6 @@ namespace Restaurant_Api.Services
                 Admin toUpdate = Get(account._id);
                 if (toUpdate == null)
                     return;
-                account._id = toUpdate._id;
                 FilterDefinition<Admin> filter = Builders<Admin>.Filter.Eq("_id", toUpdate._id);
                 account.Password = EncryptPassword.HashPassword(account.Password);  //Encrypt the password again
                 AdminCollection.FindOneAndReplace(filter, account);
