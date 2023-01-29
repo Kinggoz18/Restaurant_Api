@@ -19,6 +19,11 @@ using System;
 using MongoDB.Bson;
 namespace Restaurant_Api.Models
 {
+    public class AccountData<T> where T : iAccount
+    {
+        public string? _id;
+        public T? account;
+    }
     public interface iAccount
     {
         //The user ID
