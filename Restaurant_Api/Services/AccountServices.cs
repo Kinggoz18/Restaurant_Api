@@ -182,8 +182,15 @@ namespace Restaurant_Api.Services
                 Customer toUpdate = Get(AccountoUpdate_ID);
                 if (toUpdate == null)
                     return null;
+                //Find if an account with the existing email already exists
+                FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("EmailAddress", account.EmailAddress);
+                Customer result = CustomerCollection.Find(filter).FirstOrDefault();
+                if (result != null)
+                {
+                    return null;
+                }
                 account._id = toUpdate._id;
-                FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("_id", toUpdate._id);
+                filter = Builders<Customer>.Filter.Eq("_id", toUpdate._id);
                 account.Password = EncryptPassword.HashPassword(account.Password);  //Encrypt the password again
                 CustomerCollection.FindOneAndReplace(filter, account);
                 return account;
@@ -372,10 +379,19 @@ namespace Restaurant_Api.Services
             {
 
                 Admin toUpdate = Get(AdminToUpdate_ID);
+                //If the user does not exist
                 if (toUpdate == null)
                     return null;
+                //Find if an account with the existing email already exists
+                FilterDefinition<Admin> filter = Builders<Admin>.Filter.Eq("EmailAddress", account.EmailAddress);
+                Admin result = AdminCollection.Find(filter).FirstOrDefault();
+                if (result != null)
+                {
+                    return null;
+                }
+
                 account._id = toUpdate._id;
-                FilterDefinition<Admin> filter = Builders<Admin>.Filter.Eq("_id", toUpdate._id);
+                filter = Builders<Admin>.Filter.Eq("_id", toUpdate._id);
                 account.Password = EncryptPassword.HashPassword(account.Password);  //Encrypt the password again
                 AdminCollection.FindOneAndReplace(filter, account);
                 return account;
@@ -519,8 +535,15 @@ namespace Restaurant_Api.Services
                 Employee toUpdate = Get(AccountoUpdate_ID);
                 if (toUpdate == null)
                     return null;
+                //Find if an account with the existing email already exists
+                FilterDefinition<Employee> filter = Builders<Employee>.Filter.Eq("EmailAddress", account.EmailAddress);
+                Employee result = EmployeeCollection.Find(filter).FirstOrDefault();
+                if (result != null)
+                {
+                    return null;
+                }
                 account._id = toUpdate._id;
-                FilterDefinition<Employee> filter = Builders<Employee>.Filter.Eq("_id", toUpdate._id);
+                filter = Builders<Employee>.Filter.Eq("_id", toUpdate._id);
                 account.Password = EncryptPassword.HashPassword(account.Password);  //Encrypt the password again
                 EmployeeCollection.FindOneAndReplace(filter, account);
                 return account;
