@@ -17,12 +17,14 @@
 
 using System;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
 namespace Restaurant_Api.Models
 {
     public interface iAccount
     {
         //The user ID
-        public ObjectId _id { get; set; }
+        public string? _id { get; set; }
         //The user email address
         public string? EmailAddress { get; set; }
         //The user password
@@ -31,7 +33,8 @@ namespace Restaurant_Api.Models
 	public class Customer : iAccount
 	{
 		//The user ID
-        public ObjectId _id { get; set; }
+        [BsonRepresentation(BsonType.String)]
+        public string? _id { get; set; }
         //The user first name
         public string? FirstName { get; set; }
         //The user last name
@@ -54,7 +57,8 @@ namespace Restaurant_Api.Models
     public class Admin : iAccount
     {
         //The user ID
-        public ObjectId _id { get; set; }
+        [BsonRepresentation(BsonType.String)]
+        public string? _id { get; set; }
         //The user first name
         public string? FirstName { get; set; }
         //The user last name
@@ -69,7 +73,7 @@ namespace Restaurant_Api.Models
     public class Employee : iAccount
     {
         //The user ID
-        public ObjectId _id { get; set; }
+        public string? _id { get; set; }
         //The user first name
         public string? FirstName { get; set; }
         //The user last name
