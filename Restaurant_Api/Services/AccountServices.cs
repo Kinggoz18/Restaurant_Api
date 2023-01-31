@@ -366,23 +366,24 @@ namespace Restaurant_Api.Services
         }
 
         //Update a particular admin account
-        public static void Update(Admin account, string AdminToUpdate_ID)
+        public static Admin Update(Admin account, string AdminToUpdate_ID)
         {
             try
             {
 
                 Admin toUpdate = Get(AdminToUpdate_ID);
                 if (toUpdate == null)
-                    return;
+                    return null;
                 account._id = toUpdate._id;
                 FilterDefinition<Admin> filter = Builders<Admin>.Filter.Eq("_id", toUpdate._id);
                 account.Password = EncryptPassword.HashPassword(account.Password);  //Encrypt the password again
                 AdminCollection.FindOneAndReplace(filter, account);
+                return account;
             }
             catch
             {
                 Console.WriteLine("An Exception occured!");
-
+                return null;
             }
         }
     }
