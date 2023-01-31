@@ -33,19 +33,6 @@ namespace Restaurant_Api.Services
         public static abstract T Update(T account, string AccountoUpdate_ID);
         public static abstract void Remove(string id);
     }
-    public class IdGenerator
-    {
-        public IdGenerator() { }
-        //Simple ID generator 
-        public static string GenerateId()
-        {
-            string id = "";
-            id += DateTime.Now.ToString();
-            Random r = new Random();
-            id= id.Insert(2, r.Next(1, 9999999).ToString()).Replace(" ", "").Replace(":", "");
-            return id;
-        }
-    }
     //Class for hashing users passwords
     public class EncryptPassword
     {
@@ -153,7 +140,7 @@ namespace Restaurant_Api.Services
                 }
                 //Hash the password
                 account.Password = EncryptPassword.HashPassword(account.Password);
-                account._id = IdGenerator.GenerateId();
+                account._id = IdGenerator.GenerateId;
                 CustomerCollection.InsertOne(account);
                 return account;
             }
@@ -277,7 +264,7 @@ namespace Restaurant_Api.Services
                 }
                 //Hash the password
                 account.Password = EncryptPassword.HashPassword(account.Password);  //Hash the password
-                account._id = IdGenerator.GenerateId();
+                account._id = IdGenerator.GenerateId;
                 AdminCollection.InsertOne(account);
                 return result = AdminCollection.Find(filter).FirstOrDefault();
             }
@@ -425,7 +412,7 @@ namespace Restaurant_Api.Services
                 }
                 //Hash the password
                 account.Password = EncryptPassword.HashPassword(account.Password);
-                account._id = IdGenerator.GenerateId();
+                account._id = IdGenerator.GenerateId;
                 EmployeeCollection.InsertOne(account);
                 return result = EmployeeCollection.Find(filter).FirstOrDefault();
             }
