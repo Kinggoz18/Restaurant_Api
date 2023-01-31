@@ -42,6 +42,10 @@ namespace Restaurant_Api.Services
             }
             return totalSales;
         }
+        public int GetNumberOfOrders()
+        {
+            return OrderServices.GetAllOrders().Count();
+        }
     }
 
 

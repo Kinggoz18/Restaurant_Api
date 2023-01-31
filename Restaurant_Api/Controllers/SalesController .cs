@@ -12,12 +12,22 @@ namespace Restaurant_Api.Controllers
         {
 
         }
-        [HttpGet]
-        public ActionResult<double> GetTotalSales()
+        [HttpGet("GetTotalSales(Price)/{GetTotalSales}")]
+        public IActionResult GetTotalSales()
         {
+            // Get all orders and calculate total sales
             var orders = OrderServices.GetAllOrders();
             var totalSales = orders.Sum(x => x.TotalPrice);
-            return Ok(totalSales);
+
+            return Ok(new { TotalSales = totalSales });
+        }
+        [HttpGet("GetNumberOfOrders/{GetNumberOfOrders}")]
+        public IActionResult GetNumberOfOrders()
+        {
+            // Get number of orders
+            var numberOfOrders = OrderServices.GetAllOrders().Count;
+
+            return Ok(new { NumberOfOrders = numberOfOrders });
         }
     }
 }
