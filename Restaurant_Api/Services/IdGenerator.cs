@@ -13,7 +13,10 @@ namespace Restaurant_Api.Services
                 string id = "";
                 id += DateTime.Now.ToString();
                 Random r = new Random();
-                id = id.Insert(2, r.Next(1, 9999999).ToString()).Replace(" ", "").Replace(":", "");
+                id = id.Insert(1, r.Next(1, 9999).ToString())
+                    .Insert(2, r.Next(1, 99999).ToString())
+                    .Insert(5, r.Next(1, 999).ToString())
+                    .Replace(" ", "").Replace(":", "").Replace("/", "");
                 return id;
             }
         }
