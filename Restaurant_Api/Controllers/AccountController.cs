@@ -99,6 +99,14 @@ namespace Restaurant_Api.Controllers
         [HttpPost]
         [Route("CreateCustomer/")]
         public ActionResult<Customer> CreateAccount(Customer account) => CustomerServices.Add(account);
+        //Endpoint to add a new Admin
+        [HttpPut]
+        [Route("UpdatePoint/")]
+        public ActionResult<Customer> UpdatePoints(string id) => CustomerServices.UpdatePoint(id);
+        //Endpoint to add a new Admin
+        [HttpPut]
+        [Route("ConsumePoint/")]
+        public ActionResult<Customer> ConsumePoints(string id) => CustomerServices.UsePoints(id);
     }
 
     [ApiController]
