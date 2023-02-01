@@ -19,16 +19,15 @@ using MongoDB.Driver;
 using MongoDB.Bson;
 using Restaurant_Api.Models;
 using System.Collections.ObjectModel;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Restaurant_Api.Services
 {
-	public class OrderServices
-	{
+    public class OrderServices
+    {
         static ConnectDB connection = new ConnectDB();
         static IMongoCollection<Order> _orders = connection.Client.GetDatabase("Drum_Rock_Jerk").GetCollection<Order>("Orders");
-        public OrderServices(IMongoDatabase database) 
-		{
+        public OrderServices(IMongoDatabase database)
+        {
 
         }
         // provides a list of orders
@@ -37,28 +36,29 @@ namespace Restaurant_Api.Services
             return _orders.Find(order => true).ToList();
         }
         //get customers orders
-        public static Order GetOrder(ObjectId id)
+        public static Order GetOrder(string id)
         {
-            var order = _orders.Find<Order>(o => o._id == id).FirstOrDefault();
-            return order;
+            FilterDefinition<Order> filter = Builders<Order>.Filter.Eq("_id", id);
+            Order result = _orders.Find(filter).FirstOrDefault();
+            return result;
         }
         //create an order 
 
         public static void CreateOrder(Order order)
         {
+            order._id = IdGenerator.GenerateId;
             _orders.InsertOne(order);
         }
 
         public static Order UpdateOrder(string orderId, Order orderIn)
         {
-            var objectId = new ObjectId(orderId);
-            var order = OrderServices.GetOrder(objectId);
+            var order = OrderServices.GetOrder(orderId);
             if (order == null)
             {
                 return null;
             }
 
-            var filter = Builders<Order>.Filter.Eq("_id", objectId);
+            var filter = Builders<Order>.Filter.Eq("_id", orderId);
             var update = Builders<Order>.Update
                 .Set("CustomerName", orderIn.CustomerName)
                 .Set("PhoneNumber", orderIn.PhoneNumber)
@@ -100,7 +100,7 @@ namespace Restaurant_Api.Services
         }
         //delete a single document from a collection that matches a specified filter. In
 
-        public static void RemoveOrder(ObjectId id)
+        public static void RemoveOrder(string id)
         {
             _orders.DeleteOne(order => order._id == id);
         }

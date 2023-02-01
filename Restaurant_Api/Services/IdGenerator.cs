@@ -1,4 +1,19 @@
-﻿using System;
+﻿/*======================================================================
+| AccountServices class
+|
+| Name: AccountServices.cs
+|
+| Written by: Chigozie Muonagolu - January 2023
+|
+| Purpose: Generates custom IDs for the objects.
+|
+| usage: Used in the services and other classes that may depend on it.
+|
+| Description of properties: GenerateId: Generates a id using the currrent timestap, and random integers
+|
+|------------------------------------------------------------------
+*/
+using System;
 namespace Restaurant_Api.Services
 {
     public class IdGenerator

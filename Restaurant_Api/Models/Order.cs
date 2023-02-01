@@ -29,11 +29,13 @@ namespace Restaurant_Api.Models
 {
     public class Order
     {
-        //this is the customer id 
-        public ObjectId _id { get; set; }
+        //this is the order id 
+        [BsonRepresentation(BsonType.String)]
+        public string? _id { get; set; }
+        //customer email
+        public string? CustomerEmail { get; set; }
         //this will get the users name
-        [BsonElement("Name")]
-        public string? CustomerName { get; }
+        public string? CustomerName { get; set; }
         //the users phone number 
         public string? PhoneNumber { get; set; }
         // the users order item gotten form the menu 
@@ -46,13 +48,6 @@ namespace Restaurant_Api.Models
         //the total price for the order
         public double TotalPrice { get; set; }
 
-
-    }
-    public class Item
-    {
-        public ObjectId _id { get; set; }
-        public string Name { get; set; }
-        public double Price { get; set; }
     }
 }
 

@@ -20,23 +20,14 @@
 |------------------------------------------------------------------
 */
 
-
-
-
-
-
-
-
-
-
-
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 public class Review
 {
-    
-    public ObjectId _id { get; set; }
+
+    [BsonRepresentation(BsonType.String)]
+    public string? _id { get; set; }
     public string? Title { get; set; }
     public string? Description { get; set; }
     public int Rating { get; set; }

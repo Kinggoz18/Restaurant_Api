@@ -23,7 +23,7 @@ namespace Restaurant_Api.Controllers
         [Route("GetOrder")]//returns a particlar users order
         public ActionResult<Order> Get(string id)
         {
-            var order = OrderServices.GetOrder(ObjectId.Parse(id));
+            var order = OrderServices.GetOrder(id);
 
             if (order == null)
             {
@@ -79,14 +79,14 @@ namespace Restaurant_Api.Controllers
         [Route("delete/{id}")]
         public IActionResult Delete(string Userid)
         {
-            var order = OrderServices.GetOrder(ObjectId.Parse(Userid));
+            var order = OrderServices.GetOrder(Userid);
 
             if (order == null)
             {
                 return NotFound();
             }
 
-            OrderServices.RemoveOrder(ObjectId.Parse(Userid));
+            OrderServices.RemoveOrder(Userid);
             return NoContent();
         }
     }

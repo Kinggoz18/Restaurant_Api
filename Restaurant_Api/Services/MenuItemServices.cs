@@ -58,8 +58,7 @@ namespace Restaurant_Api.Services
         {
             try
             {
-                ObjectId id = new ObjectId(Itemid);
-                FilterDefinition<MenuItem> filter = Builders<MenuItem>.Filter.Eq("_id", id);
+                FilterDefinition<MenuItem> filter = Builders<MenuItem>.Filter.Eq("_id", Itemid);
                 MenuItem result = MenuItemCollection.Find(filter).FirstOrDefault();
                 return result;
             }
@@ -74,6 +73,7 @@ namespace Restaurant_Api.Services
         {
             try
             {
+                menuItem._id = IdGenerator.GenerateId;
                 MenuItemCollection.InsertOne(menuItem);
                 return menuItem;
             }
@@ -105,21 +105,23 @@ namespace Restaurant_Api.Services
             }
         }
         //Update a MenuItem
-        public static void Update(string id, MenuItem newItem)
+        public static MenuItem Update(string id, MenuItem newItem)
         {
             try
             {
                 MenuItem toUpdate = Get(id);
                 if (toUpdate == null)
-                    return;
+                    return null;
                 FilterDefinition<MenuItem> filter = Builders<MenuItem>.Filter.Eq("_id", toUpdate._id);
                 newItem._id = toUpdate._id;                 //Keep the old id
                 newItem.ImageLink = toUpdate.ImageLink;     //Keep the old image
-                MenuItemCollection.FindOneAndReplace(filter, newItem);
+                var updated = MenuItemCollection.FindOneAndReplace(filter, newItem);
+                return updated;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
+                return null;
             }
         }
         //Update Item Image link

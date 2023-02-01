@@ -6,7 +6,7 @@ namespace Restaurant_Api.Models
 		//get sales
 		public double GetTotalSales { get; set; }
 
-		public int GetNumberOfOrderss { get; set; }
+		public int GetNumberOfOrders { get; set; }
 	}
 }
 			

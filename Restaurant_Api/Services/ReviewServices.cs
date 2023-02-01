@@ -11,7 +11,7 @@ namespace Restaurant_Api.Services
 
         static ConnectDB connection = new ConnectDB();
         static IMongoCollection<Review> _review = connection.Client.GetDatabase("Drum_Rock_Jerk").GetCollection<Review>("Review");
-        public ReviewServices(IMongoDatabase database)
+        public ReviewServices()
 		{
 		}
 
@@ -25,11 +25,12 @@ namespace Restaurant_Api.Services
         //create a review 
         public static void CreateReview(Review review) {
 
+            review._id = IdGenerator.GenerateId;
             _review.InsertOne(review);
 
         }
 
-        ////returns all the review
+        //returns all the review
         public static List<Review> GetAllReviews()
         {
             var filter = Builders<Review>.Filter.Empty;
@@ -47,17 +48,16 @@ namespace Restaurant_Api.Services
         }
 
         //get customer reviews
-        public static Review GetReview(ObjectId id)
+        public static Review GetReview(string id)
         {
             var review = _review.Find<Review>(o => o._id == id).FirstOrDefault();
             return review ;
         }
 
-        //delete customer reviews by object id 
-        public static Review RemoveReview(ObjectId id)
+        //delete customer reviews by user id 
+        public static void RemoveReview(string id)
         {
-            var review = _review.Find<Review>(o => o._id == id).FirstOrDefault();
-            return review;
+            var review = _review.DeleteOne(o => o.UserId == id);
         }
 
         //delete customer reviews by object 

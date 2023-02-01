@@ -30,21 +30,6 @@ namespace Restaurant_Api.Services
 
         public MenuServices()
         {
-            /*List<BsonDocument> pipeline = new List<BsonDocument>
-            {
-                new BsonDocument("$lookup",
-                new BsonDocument
-                {
-                    { "from", "menuItems" },
-                    { "localField", "FoodList" },
-                    { "foreignField", "_id" },
-                    { "as", "menuItems" },
-                }
-            )
-            };
-
-            IAsyncCursor<Menu> cursor = MenuCollection.Aggregate<Menu>(pipeline);
-            List<Menu> menusWithItems = cursor.ToList();*/
         }
 
         public static List<Menu> GetAllMenu()
@@ -78,23 +63,20 @@ namespace Restaurant_Api.Services
             MenuCollection.FindOneAndDelete(filter);
         }
 
-        public static void UpdateMenu(string id, Menu newMenu)
+        public static Menu UpdateMenu(string id, Menu newMenu)
         {
-            //var index = MenuCollection.FindI(p => p.Id == id.Id);
-            //if(index == -1)
-            //  return;
-
-            //object[index] = id;
             Menu toUpdate = Get(id);
             if (toUpdate == null)
-                return;
+                return null;
             FilterDefinition<Menu> filter = Builders<Menu>.Filter.Eq("_id", toUpdate._id);
             newMenu._id = toUpdate._id;                 //Keep the old id
-            MenuCollection.FindOneAndReplace(filter, newMenu);
+            Menu Updated = MenuCollection.FindOneAndReplace(filter, newMenu);
+            return Updated;
         }
 
         public static Menu Add(Menu newMenu)
         {
+            newMenu._id = IdGenerator.GenerateId;
             MenuCollection.InsertOne(newMenu);
             return newMenu;
         }

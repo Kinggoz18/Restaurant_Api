@@ -27,8 +27,8 @@ namespace Restaurant_Api.Services
 	public interface iPaymentServices<T>
 	{
 		public static abstract void Add(T payment);
-		public static abstract void Remove(ObjectId id);
-		public static abstract T Get(ObjectId id);
+		public static abstract void Remove(string id);
+		public static abstract T Get(string id);
 	}
 
 	//Make payment
@@ -47,11 +47,12 @@ namespace Restaurant_Api.Services
         //Adds a new card
         public static void Add(CardPayment payment)
         {
+            payment._id = IdGenerator.GenerateId;
             CardCollection.InsertOne(payment);
         }
 
         //Returns a card details
-        public static CardPayment Get(ObjectId id)
+        public static CardPayment Get(string id)
         {
             FilterDefinition<CardPayment> filter = Builders<CardPayment>.Filter.Eq("_id", id);
             CardPayment result = CardCollection.Find(filter).First();
@@ -59,7 +60,7 @@ namespace Restaurant_Api.Services
         }
 
         //Removes a card
-        public static void Remove(ObjectId id)
+        public static void Remove(string id)
         {
             CardPayment toRemove = Get(id);
             if (toRemove == null)
@@ -68,7 +69,7 @@ namespace Restaurant_Api.Services
             CardCollection.FindOneAndDelete(filter);
         }
         //Makes a refund to a particular card
-        public static void RefundCard(ObjectId id)
+        public static void RefundCard(string id)
         {
             throw new NotImplementedException();
         }
@@ -96,11 +97,12 @@ namespace Restaurant_Api.Services
         public static void Add(PaypalPayment payment)
         {
             //Implement validation here
+            payment._id = IdGenerator.GenerateId;
             PayPalCollection.InsertOne(payment);
         }
 
         //Returns a paypal account detail
-        public static PaypalPayment Get(ObjectId id)
+        public static PaypalPayment Get(string id)
         {
             FilterDefinition<PaypalPayment> filter = Builders<PaypalPayment>.Filter.Eq("_id", id);
             PaypalPayment result = PayPalCollection.Find(filter).First();
@@ -108,7 +110,7 @@ namespace Restaurant_Api.Services
         }
 
         //Removes a paypal account
-        public static void Remove(ObjectId id)
+        public static void Remove(string id)
         {
             PaypalPayment toRemove = Get(id);
             if (toRemove == null)
@@ -117,7 +119,7 @@ namespace Restaurant_Api.Services
             PayPalCollection.FindOneAndDelete(filter);
         }
         //Makes a refund to a particular paypal account
-        public static void RefundCard(ObjectId id)
+        public static void RefundCard(string id)
         {
             throw new NotImplementedException();
         }

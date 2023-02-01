@@ -16,13 +16,15 @@
 */
 using System;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Restaurant_Api.Models
 {
 	public class MenuItem
 	{
         //The Item Id
-        public ObjectId _id { get; set; }
+        [BsonRepresentation(BsonType.String)]
+        public string? _id { get; set; }
         //Name of the item
         public string? Name { get; set; }
         //Price of the item

@@ -16,13 +16,16 @@
 */
 using System;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
 namespace Restaurant_Api.Models
 {
     //Card payments
     public class CardPayment
     {
         //The payement Id
-        public ObjectId _id { get; set; }
+        [BsonRepresentation(BsonType.String)]
+        public string? _id { get; set; }
         //The user of payements Id
         public ObjectId OwnerID { get; set; }
         //The card number 
@@ -35,7 +38,8 @@ namespace Restaurant_Api.Models
     public class PaypalPayment
     {
         //The payement Id
-        public ObjectId _id { get; set; }
+        [BsonRepresentation(BsonType.String)]
+        public string? _id { get; set; }
         //The users paypal email address
         public string? Email { get; set; }
     }
@@ -44,7 +48,8 @@ namespace Restaurant_Api.Models
     public class CardDetails
     {
         //The user of payements Id
-        public ObjectId OwnerID { get; set; }
+        [BsonRepresentation(BsonType.String)]
+        public string? _id { get; set; }
         //The users first name
         public string? FirstName { get; set; }
         //The users last name

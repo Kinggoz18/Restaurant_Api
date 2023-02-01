@@ -63,14 +63,14 @@ namespace Restaurant_Api.Controllers
         [Route("Delete")]
         public IActionResult Delete(string id)
         {
-            var review = ReviewServices.GetReview(ObjectId.Parse(id));
+            var review = ReviewServices.GetReview(id);
 
             if (review == null)
             {
                 return NotFound();
             }
 
-            ReviewServices.RemoveReview(ObjectId.Parse(id));
+            ReviewServices.RemoveReview(id);
             return NoContent();
         }
     }
