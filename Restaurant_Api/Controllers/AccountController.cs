@@ -53,7 +53,7 @@ namespace Restaurant_Api.Controllers
         //Endpoint to update a particular admin account
         [HttpPut]
         [Route("UpdateAdmin/")]
-        public ActionResult<Admin> UpdateAccount(Admin account, string AdminToUpdate_ID) => AdminServices.Update(account, AdminToUpdate_ID);
+        public ActionResult<Admin> UpdateAccount(Admin account, string AccountoUpdate_ID) => AdminServices.Update(account, AccountoUpdate_ID);
 
         //Endpoint to add a new Admin
         [HttpPost]
