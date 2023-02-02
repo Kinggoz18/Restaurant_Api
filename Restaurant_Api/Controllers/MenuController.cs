@@ -33,9 +33,9 @@ namespace Restaurant_Api.Controllers
                 return NotFound();
             return menu;
         }*/
-        public ActionResult<Menu> Get(string id)
+        public ActionResult<Menu> Get(string name)
         {
-            return MenuServices.Get(id);
+            return MenuServices.Get(name);
         }
 
 
@@ -64,12 +64,12 @@ namespace Restaurant_Api.Controllers
 
         // DELETE: api/Menu/5
         [HttpDelete("DeleteMenu/{DeleteMneu}")]
-        public ActionResult<Menu> Delete(string id)
+        public ActionResult<Menu> Delete(string name)
         {
-            var menu = MenuServices.Get(id);
+            var menu = MenuServices.Get(name);
             if (menu == null)
                 return NotFound();
-            MenuServices.Delete(id);
+            MenuServices.Delete(name);
             return menu;
         }
     }

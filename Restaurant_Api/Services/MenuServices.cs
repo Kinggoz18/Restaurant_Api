@@ -38,11 +38,11 @@ namespace Restaurant_Api.Services
         }
         
 
-        public static Menu Get(string id)
+        public static Menu Get(string name)
         {
             try
             {
-                FilterDefinition<Menu> filter = Builders<Menu>.Filter.Eq("_id", id);
+                FilterDefinition<Menu> filter = Builders<Menu>.Filter.Eq("Name", name);
                 Menu result = MenuCollection.Find(filter).FirstOrDefault();
                 return result;
             }
@@ -54,18 +54,18 @@ namespace Restaurant_Api.Services
             }
         }
 
-        public static void Delete(string id)
+        public static void Delete(string name)
         {
-            Menu toRemove = Get(id);
+            Menu toRemove = Get(name);
             if (toRemove == null)
                 return;
-            FilterDefinition<Menu> filter = Builders<Menu>.Filter.Eq("_id", id);
+            FilterDefinition<Menu> filter = Builders<Menu>.Filter.Eq("_id", toRemove._id);
             MenuCollection.FindOneAndDelete(filter);
         }
 
-        public static Menu UpdateMenu(string id, Menu newMenu)
+        public static Menu UpdateMenu(string name, Menu newMenu)
         {
-            Menu toUpdate = Get(id);
+            Menu toUpdate = Get(name);
             if (toUpdate == null)
                 return null;
             FilterDefinition<Menu> filter = Builders<Menu>.Filter.Eq("_id", toUpdate._id);

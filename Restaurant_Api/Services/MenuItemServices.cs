@@ -36,6 +36,8 @@ namespace Restaurant_Api.Services
 
         static ConnectDB? connection = new ConnectDB();
         static IMongoCollection<MenuItem>? MenuItemCollection = connection.Client.GetDatabase("Drum_Rock_Jerk").GetCollection<MenuItem>("MenuItem");
+        static IMongoCollection<Menu>? MenuCollection = connection.Client.GetDatabase("Drum_Rock_Jerk").GetCollection<Menu>("Menu");
+
         MenuItemServices()
         {
 
@@ -69,12 +71,20 @@ namespace Restaurant_Api.Services
             }
         }
         //Add MenuItem
-        public static MenuItem Add(MenuItem menuItem)
+        public static MenuItem Add(MenuItem menuItem, IFormFile file)
         {
             try
             {
                 menuItem._id = IdGenerator.GenerateId;
-                MenuItemCollection.InsertOne(menuItem);
+               
+                MenuItemCollection.InsertOne(menuItem); //Add the item to the Menu Item collection
+                MenuItem item = AddImage(file, menuItem.Name);  //Update its image list
+
+                //Add the item to its menu
+                FilterDefinition<Menu> filter = Builders<Menu>.Filter.Eq("Name", menuItem.Menu);
+                Menu menu = MenuCollection.Find(filter).FirstOrDefault();
+                menu.FoodList.Add(item);
+                MenuCollection.FindOneAndReplace(filter, menu);
                 return menuItem;
             }
             catch (Exception ex)
@@ -96,8 +106,15 @@ namespace Restaurant_Api.Services
                 var deletionParams = new DeletionParams(PublicID);
                 var result = cloudinary.Destroy(deletionParams);
 
-                FilterDefinition<MenuItem> filter = Builders<MenuItem>.Filter.Eq("_id", toRemove._id);
-                MenuItemCollection.FindOneAndDelete(filter);
+                //Remove the item to its menu
+                FilterDefinition<Menu> filter = Builders<Menu>.Filter.Eq("Name", toRemove.Menu);
+                Menu menu = MenuCollection.Find(filter).FirstOrDefault();
+                menu.FoodList.RemoveAll(_=>_._id == toRemove._id);
+                MenuCollection.FindOneAndReplace(filter, menu);
+
+                //Finally remove the item from the menu item collection 
+                FilterDefinition<MenuItem> itemFilter = Builders<MenuItem>.Filter.Eq("_id", toRemove._id);
+                MenuItemCollection.FindOneAndDelete(itemFilter);
             }
             catch (Exception ex)
             {
@@ -116,6 +133,14 @@ namespace Restaurant_Api.Services
                 newItem._id = toUpdate._id;                 //Keep the old id
                 newItem.ImageLink = toUpdate.ImageLink;     //Keep the old image
                 var updated = MenuItemCollection.FindOneAndReplace(filter, newItem);
+
+                //Update the item in its menu
+                FilterDefinition<Menu> menuFilter = Builders<Menu>.Filter.Eq("Name", toUpdate.Menu);
+                Menu menu = MenuCollection.Find(menuFilter).FirstOrDefault();
+                menu.FoodList.RemoveAll(_ => _._id == toUpdate._id);    //Remove the old one
+                menu.FoodList.Add(toUpdate);  //Add it back
+
+                MenuCollection.FindOneAndReplace(menuFilter, menu);
                 return updated;
             }
             catch (Exception ex)
@@ -125,7 +150,7 @@ namespace Restaurant_Api.Services
             }
         }
         //Update Item Image link
-        public static async void AddImage(IFormFile file, string FileName)
+        public static MenuItem AddImage(IFormFile file, string FileName)
         {
             try
             {
@@ -140,10 +165,12 @@ namespace Restaurant_Api.Services
                 FilterDefinition<MenuItem> filter = Builders<MenuItem>.Filter.Eq("Name", FileName);
                 var update = Builders<MenuItem>.Update.Set("ImageLink", uploadResult.SecureUri);  //Change to the new url
                 MenuItemCollection.UpdateOne(filter, update);
+                return MenuItemCollection.Find(filter).FirstOrDefault();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
+                return null;
             }
         }
     }
