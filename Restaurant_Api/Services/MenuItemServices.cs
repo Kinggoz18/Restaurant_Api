@@ -85,7 +85,7 @@ namespace Restaurant_Api.Services
                 Menu menu = MenuCollection.Find(filter).FirstOrDefault();
                 menu.FoodList.Add(item);
                 MenuCollection.FindOneAndReplace(filter, menu);
-                return menuItem;
+                return item;
             }
             catch (Exception ex)
             {
