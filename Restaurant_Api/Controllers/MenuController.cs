@@ -45,7 +45,8 @@ namespace Restaurant_Api.Controllers
         {
             Menu menu = new Menu
             {
-                Name = MenuName
+                Name = MenuName,
+                FoodList = new List<MenuItem>()
             };
 
             MenuServices.Add(menu);
