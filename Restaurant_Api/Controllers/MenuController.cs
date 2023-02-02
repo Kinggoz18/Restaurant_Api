@@ -40,9 +40,14 @@ namespace Restaurant_Api.Controllers
 
 
         // POST: api/Menu
-        [HttpPost("addMenu/{addMenu}")]
-        public void CreateMenu(Menu menu)
+        [HttpPost("addMenu/{MenuName}")]
+        public void CreateMenu(string MenuName)
         {
+            Menu menu = new Menu
+            {
+                Name = MenuName
+            };
+
             MenuServices.Add(menu);
         }
 

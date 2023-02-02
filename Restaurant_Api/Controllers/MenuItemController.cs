@@ -26,7 +26,10 @@ namespace Restaurant_Api.Controllers
         //Add a new menu item
         [HttpPost]
         [Route("AddMenuItem/")]
-        public ActionResult<MenuItem> AddMenuItem(MenuItem menuItem, IFormFile file) => MenuItemServices.Add(menuItem, file);
+        public ActionResult<MenuItem> AddMenuItem([FromForm] MenuItemModel menuItemModel)
+        {
+           return MenuItemServices.Add(menuItemModel.item, menuItemModel.File);
+        }
 
         //Removes a  menu item
         [HttpDelete]

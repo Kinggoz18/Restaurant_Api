@@ -36,5 +36,11 @@ namespace Restaurant_Api.Models
         //Menu Item image name
         public string? ImageLink { get; set; }
     }
+
+    public class MenuItemModel
+    {
+        public MenuItem? item { get; set; }
+        public IFormFile? File { get; set; }
+    }
 }
 
