@@ -51,7 +51,7 @@ namespace Restaurant_Api.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                System.Diagnostics.Debug.WriteLine(ex);
                 return null;
             }
         }
@@ -66,7 +66,7 @@ namespace Restaurant_Api.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                System.Diagnostics.Debug.WriteLine(ex);
                 return null;
             }
         }
@@ -89,7 +89,7 @@ namespace Restaurant_Api.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                System.Diagnostics.Debug.WriteLine(ex);
                 return null;
             }
         }
@@ -118,7 +118,7 @@ namespace Restaurant_Api.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                System.Diagnostics.Debug.WriteLine(ex);
             }
         }
         //Update a MenuItem
@@ -145,7 +145,7 @@ namespace Restaurant_Api.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                System.Diagnostics.Debug.WriteLine(ex);
                 return null;
             }
         }
@@ -169,7 +169,7 @@ namespace Restaurant_Api.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                System.Diagnostics.Debug.WriteLine(ex);
                 return null;
             }
         }
