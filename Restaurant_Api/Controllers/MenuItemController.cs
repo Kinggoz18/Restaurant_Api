@@ -26,7 +26,7 @@ namespace Restaurant_Api.Controllers
         //Add a new menu item
         [HttpPost]
         [Route("AddMenuItem/")]
-        public ActionResult<MenuItem> AddMenuItem([FromForm] MenuItemModel menuItemModel)
+        public ActionResult<MenuItem> AddMenuItem(MenuItemModel menuItemModel)
         {
            return MenuItemServices.Add(menuItemModel.item, menuItemModel.File);
         }
@@ -43,7 +43,7 @@ namespace Restaurant_Api.Controllers
 
         [HttpPost]
         [Route("MenuItemImage/")]
-        public void UpdateItemImage(IFormFile file, string FileName) => MenuItemServices.AddImage(file, FileName);
+        public void UpdateItemImage(string file, string FileName) => MenuItemServices.AddImage(file, FileName);
 
     }
 }

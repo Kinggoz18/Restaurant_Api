@@ -40,7 +40,7 @@ namespace Restaurant_Api.Models
     public class MenuItemModel
     {
         public MenuItem? item { get; set; }
-        public IFormFile? File { get; set; }
+        public string? File { get; set; }
     }
 }
 

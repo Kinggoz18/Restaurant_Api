@@ -28,7 +28,43 @@ using CloudinaryDotNet.Actions;
 
 namespace Restaurant_Api.Services
 {
+    public class Base64IFormFile : IFormFile
+    {
+        private readonly byte[] _fileBytes;
+        private readonly string _fileName;
 
+        public Base64IFormFile(string base64String, string fileName)
+        {
+            _fileBytes = Convert.FromBase64String(base64String);
+            _fileName = fileName;
+        }
+
+        public string ContentType => throw new NotImplementedException();
+
+        public IHeaderDictionary Headers => throw new NotImplementedException();
+
+        public long Length => _fileBytes.Length;
+
+        public string Name => throw new NotImplementedException();
+
+        public string FileName => _fileName;
+
+        public string ContentDisposition => throw new NotImplementedException();
+
+        public void CopyTo(Stream target)
+        {
+            target.Write(_fileBytes, 0, _fileBytes.Length);
+        }
+
+        public Stream OpenReadStream()
+        {
+            return new MemoryStream(_fileBytes);
+        }
+        public Task CopyToAsync(Stream target, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+    }
     public class MenuItemServices
     {
         static Account account = new Account("dw1wmzgy1", "759371847652932", "9cBN-hEOeghmkNzuBZd5yDdnezk");
@@ -71,7 +107,7 @@ namespace Restaurant_Api.Services
             }
         }
         //Add MenuItem
-        public static MenuItem Add(MenuItem menuItem, IFormFile file)
+        public static MenuItem Add(MenuItem menuItem, string file)
         {
             try
             {
@@ -150,13 +186,15 @@ namespace Restaurant_Api.Services
             }
         }
         //Update Item Image link
-        public static MenuItem AddImage(IFormFile file, string FileName)
+        public static MenuItem AddImage(string file, string FileName)
         {
             try
             {
+                //convert the bytes to its iForm object
+                IFormFile Image = new Base64IFormFile(file, FileName);
                 var uploadParams = new ImageUploadParams()
                 {
-                    File = new FileDescription(FileName, file.OpenReadStream()),
+                    File = new FileDescription(FileName, Image.OpenReadStream()),
                     PublicId = FileName,
                     Folder = "MenuItem_Images"
                 };
