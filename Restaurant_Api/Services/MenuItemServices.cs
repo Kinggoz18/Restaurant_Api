@@ -14,57 +14,22 @@
 | ------------------------------------------------------------------
 */
 using System;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 using ConnectDatabase;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Restaurant_Api;
 using Restaurant_Api.Models;
-using SharpCompress.Common;
 
 using System.IO;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
+using System.Collections;
 
 namespace Restaurant_Api.Services
 {
-    public class Base64IFormFile : IFormFile
-    {
-        private readonly byte[] _fileBytes;
-        private readonly string _fileName;
-
-        public Base64IFormFile(string base64String, string fileName)
-        {
-            _fileBytes = Convert.FromBase64String(base64String);
-            _fileName = fileName;
-        }
-
-        public string ContentType => throw new NotImplementedException();
-
-        public IHeaderDictionary Headers => throw new NotImplementedException();
-
-        public long Length => _fileBytes.Length;
-
-        public string Name => throw new NotImplementedException();
-
-        public string FileName => _fileName;
-
-        public string ContentDisposition => throw new NotImplementedException();
-
-        public void CopyTo(Stream target)
-        {
-            target.Write(_fileBytes, 0, _fileBytes.Length);
-        }
-
-        public Stream OpenReadStream()
-        {
-            return new MemoryStream(_fileBytes);
-        }
-        public Task CopyToAsync(Stream target, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-    }
     public class MenuItemServices
     {
         static Account account = new Account("dw1wmzgy1", "759371847652932", "9cBN-hEOeghmkNzuBZd5yDdnezk");
@@ -186,19 +151,40 @@ namespace Restaurant_Api.Services
             }
         }
         //Update Item Image link
-        public static MenuItem AddImage(string file, string FileName)
+        public static MenuItem AddImage(string ImageBytes, string FileName)
         {
             try
             {
-                //convert the bytes to its iForm object
-                IFormFile Image = new Base64IFormFile(file, FileName);
-                var uploadParams = new ImageUploadParams()
+                byte[] imgBytes = Convert.FromBase64String(ImageBytes);
+                ImageUploadResult uploadResult;
+                using (var memoryStream = new MemoryStream(imgBytes))
                 {
-                    File = new FileDescription(FileName, Image.OpenReadStream()),
-                    PublicId = FileName,
-                    Folder = "MenuItem_Images"
-                };
-                var uploadResult = cloudinary.Upload(uploadParams);
+                    using (var image = Image.Load(memoryStream))
+                    {
+                        // Do some image processing
+                        image.Mutate(x => x.Resize(new ResizeOptions
+                        {
+                            Size = new SixLabors.ImageSharp.Size(200, 200),
+                            Mode = ResizeMode.Max
+                        }));
+
+                        // Save the image to a new stream
+                        using (var imageStream = new MemoryStream())
+                        {
+                            image.SaveAsPng(imageStream);
+                            imageStream.Seek(0, SeekOrigin.Begin);
+
+                            //Upload the image to cloudinary
+                            var uploadParams = new ImageUploadParams()
+                            {
+                                File = new FileDescription(FileName, imageStream),
+                                PublicId = FileName,
+                                Folder = "MenuItem_Images"
+                            };
+                            uploadResult = cloudinary.Upload(uploadParams);
+                        }
+                    }
+                }
                 //Get the Menu item object and update its link in the database
                 FilterDefinition<MenuItem> filter = Builders<MenuItem>.Filter.Eq("Name", FileName);
                 var update = Builders<MenuItem>.Update.Set("ImageLink", uploadResult.SecureUri);  //Change to the new url

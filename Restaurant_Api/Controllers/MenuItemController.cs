@@ -43,7 +43,7 @@ namespace Restaurant_Api.Controllers
 
         [HttpPost]
         [Route("MenuItemImage/")]
-        public void UpdateItemImage(string file, string FileName) => MenuItemServices.AddImage(file, FileName);
+        public void UpdateItemImage(string ImageBytes, string FileName) => MenuItemServices.AddImage(ImageBytes, FileName);
 
     }
 }
