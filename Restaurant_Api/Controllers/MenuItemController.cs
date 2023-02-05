@@ -39,7 +39,7 @@ namespace Restaurant_Api.Controllers
         //Updates a  menu item
         [HttpPut]
         [Route("UpdateMenuItem/{itemId}")]
-        public void UpdateMenuItem(string itemId, MenuItem newItem) => MenuItemServices.Update(itemId, newItem);
+        public MenuItem UpdateMenuItem(string itemId, MenuItem newItem) => MenuItemServices.Update(itemId, newItem);
 
         [HttpPost]
         [Route("MenuItemImage/")]
