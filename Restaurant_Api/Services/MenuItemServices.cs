@@ -85,7 +85,7 @@ namespace Restaurant_Api.Services
                 FilterDefinition<Menu> filter = Builders<Menu>.Filter.Eq("Name", menuItem.Menu);
                 Menu menu = MenuCollection.Find(filter).FirstOrDefault();
                 menu.FoodList.Add(item);
-                MenuCollection.FindOneAndReplace(filter, menu);
+                MenuCollection.FindOneAndReplaceAsync(filter, menu);
                 return item;
             }
             catch (Exception ex)
