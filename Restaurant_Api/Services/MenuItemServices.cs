@@ -110,7 +110,7 @@ namespace Restaurant_Api.Services
                 //Remove the item to its menu
                 FilterDefinition<Menu> filter = Builders<Menu>.Filter.Eq("Name", toRemove.Menu);
                 Menu menu = MenuCollection.Find(filter).FirstOrDefault();
-                menu.FoodList.RemoveAll(_=>_._id == toRemove._id);
+                menu.FoodList.RemoveAll(_=>_.Name == toRemove.Name);
                 MenuCollection.FindOneAndReplace(filter, menu);
 
                 //Finally remove the item from the menu item collection 
