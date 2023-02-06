@@ -18,29 +18,22 @@ namespace Restaurant_Api.Controllers
         }
 
         // GET: api/Menu
-        [HttpGet("GetallMenu/{GetallMenu}")]
+        [HttpGet("GetAllMenu/")]
         public IEnumerable<Menu> GetAllMenu()
         {
             return MenuServices.GetAllMenu();
         }
 
         // GET: api/Menu/5
-        [HttpGet("GetMenu/{GetMenu}")]
-        /*public ActionResult<Menu> Get(string id)
+        [HttpGet("GetMenu/{menuName}")]
+        public ActionResult<Menu> Get(string menuName)
         {
-            var menu = MenuServices.Get(id);
-            if (menu == null)
-                return NotFound();
-            return menu;
-        }*/
-        public ActionResult<Menu> Get(string name)
-        {
-            return MenuServices.Get(name);
+            return MenuServices.Get(menuName);
         }
 
 
         // POST: api/Menu
-        [HttpPost("addMenu/{MenuName}")]
+        [HttpPost("AddMenu/")]
         public void CreateMenu(string MenuName)
         {
             Menu menu = new Menu
@@ -53,30 +46,20 @@ namespace Restaurant_Api.Controllers
         }
 
         // PUT: api/Menu/5
-        [HttpPut("UpdateMenu/{UpdateMenu}")]
-        /* public ActionResult<Menu> UpdateMenu(string id, Menu newMenu)
-         {
-             var menu = MenuServices.Get(id);
-             if (menu == null)
-                 return NotFound();
-             MenuServices.UpdateMenu(id, newMenu);
-             return newMenu;
-         }*/
-        public ActionResult<Menu> Update(string id, Menu newMenu)
+        [HttpPut("UpdateMenu/{menuName}")]
+        public ActionResult<Menu> Update(string id, Menu menuName)
         {
-            MenuServices.UpdateMenu(id, newMenu);
-            return newMenu;
+            return MenuServices.UpdateMenu(id, menuName);
         }
 
         // DELETE: api/Menu/5
-        [HttpDelete("DeleteMenu/{DeleteMneu}")]
-        public ActionResult<Menu> Delete(string name)
+        [HttpDelete("DeleteMenu/{name}")]
+        public void Delete(string name)
         {
             var menu = MenuServices.Get(name);
             if (menu == null)
-                return NotFound();
+                return;
             MenuServices.Delete(name);
-            return menu;
         }
     }
 }

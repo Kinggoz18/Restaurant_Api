@@ -50,7 +50,7 @@ namespace Restaurant_Api.Controllers
         public ActionResult<Order> Update(string id, Order orderIn) => OrderServices.UpdateOrder( id , orderIn);
 
         [HttpGet]
-        [Route("GetAllUsers/{AdminId}")]
+        [Route("GetAllOrder/{AdminId}")]
         public ActionResult<List<Order>> GetAllOrders()
         {
             var orders = OrderServices.GetAllOrders();
