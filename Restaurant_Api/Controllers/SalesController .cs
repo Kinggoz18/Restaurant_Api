@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using Restaurant_Api.Services;
+using Restaurant_Api.Models;
 
 namespace Restaurant_Api.Controllers
 {
@@ -12,22 +13,17 @@ namespace Restaurant_Api.Controllers
         {
 
         }
-        [HttpGet("GetTotalSales(Price)/{GetTotalSales}")]
-        public IActionResult GetTotalSales()
-        {
-            // Get all orders and calculate total sales
-            var orders = OrderServices.GetAllOrders();
-            var totalSales = orders.Sum(x => x.TotalPrice);
-
-            return Ok(new { TotalSales = totalSales });
-        }
-        [HttpGet("GetNumberOfOrders/{GetNumberOfOrders}")]
-        public IActionResult GetNumberOfOrders()
+        [HttpGet("GetSales/")]
+        public ActionResult<Sales> GetTotalSales()
         {
             // Get number of orders
             var numberOfOrders = OrderServices.GetAllOrders().Count;
 
-            return Ok(new { NumberOfOrders = numberOfOrders });
+            // Get all orders and calculate total sales
+            var orders = OrderServices.GetAllOrders();
+            var totalSales = orders.Sum(x => x.TotalPrice);
+
+            return new Sales { GetTotalSales = totalSales, GetNumberOfOrders = numberOfOrders };
         }
     }
 }

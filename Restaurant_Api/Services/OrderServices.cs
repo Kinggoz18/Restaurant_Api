@@ -75,7 +75,7 @@ namespace Restaurant_Api.Services
 
 
 
-        ////returns all the orders 
+        //returns all the orders 
         public static List<Order> GetAllOrders()
         {
             var filter = Builders<Order>.Filter.Empty;
