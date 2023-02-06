@@ -40,9 +40,9 @@ namespace Restaurant_Api.Controllers
 
         [HttpPost]
         [Route("CreateOrder/")]
-        public void Create(Order order)
+        public ActionResult<Order> Create(Order order)
         {
-            OrderServices.CreateOrder(order);
+            return OrderServices.CreateOrder(order);
         }
 
         [HttpPut]

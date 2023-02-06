@@ -44,10 +44,11 @@ namespace Restaurant_Api.Services
         }
         //create an order 
 
-        public static void CreateOrder(Order order)
+        public static Order CreateOrder(Order order)
         {
             order._id = IdGenerator.GenerateId;
-            _orders.InsertOne(order);
+             _orders.InsertOne(order);
+            return order;
         }
 
         public static Order UpdateOrder(string orderId, Order orderIn)
