@@ -141,6 +141,9 @@ namespace Restaurant_Api.Services
                 //Hash the password
                 account.Password = EncryptPassword.HashPassword(account.Password);
                 account._id = IdGenerator.GenerateId;
+                account.Reviews = new List<Review>();
+                account.Points = 0;
+                account.PastOrders = new List<Order>();
                 CustomerCollection.InsertOne(account);
                 return account;
             }
