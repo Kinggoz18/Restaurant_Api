@@ -20,23 +20,23 @@ namespace Restaurant_Api.Controllers
         
 
         [HttpGet]
-        [Route("GetOrder")]//returns a particlar users order
-        public ActionResult<Order> Get(string id)
+        [Route("GetOrder/")]//returns a particlar users order
+        public ActionResult<List<Order>> GetOrder()
         {
-            var order = OrderServices.GetOrder(id);
+            var orders = OrderServices.GetAllOrders();
 
-            if (order == null)
+            if (orders == null)
             {
                 return NotFound();
             }
-           
 
-            return order;
+            return orders;
         }
-        
 
-        
-        
+
+
+
+
 
         [HttpPost]
         [Route("CreateOrder/")]

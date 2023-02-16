@@ -80,6 +80,7 @@ namespace Restaurant_Api.Services
         {
             var filter = Builders<Order>.Filter.Empty;
             var orders = _orders.Find(filter).ToList();
+            Console.WriteLine("Filter results: " + string.Join(", ", orders));
             return orders;
         }
 
