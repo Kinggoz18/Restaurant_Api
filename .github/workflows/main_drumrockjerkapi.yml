@@ -23,7 +23,7 @@ jobs:
           include-prerelease: true
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release --output-dir ./bin/Release/net7.x/
+        run: dotnet build --configuration Release
 
 
       - name: dotnet publish
