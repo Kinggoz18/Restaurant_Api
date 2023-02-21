@@ -28,7 +28,15 @@ namespace Restaurant_Api.Controllers
         [Route("AddMenuItem/")]
         public ActionResult<MenuItem> AddMenuItem(MenuItemModel menuItemModel)
         {
-           return MenuItemServices.Add(menuItemModel.item, menuItemModel.File);
+            if (menuItemModel.item == null || menuItemModel.File == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return MenuItemServices.Add(menuItemModel.item, menuItemModel.File);
+
+            }
         }
 
         //Removes a  menu item
