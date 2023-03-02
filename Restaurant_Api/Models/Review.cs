@@ -28,9 +28,8 @@ public class Review
 
     [BsonRepresentation(BsonType.String)]
     public string? _id { get; set; }
-    public string? Title { get; set; }
     public string? Description { get; set; }
     public int Rating { get; set; }
-    public string? FirstName { get; set; }
+    public string? Name { get; set; }
     public string? UserId { get; set; }
 }
