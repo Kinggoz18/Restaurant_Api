@@ -16,7 +16,7 @@ namespace Restaurant_Api.Services
 		}
 
         //Get All the reviews in the Database
-        public static List<Review> GetallReviews()
+        public static List<Review> GetAllReviews()
         {
             return _review.Find(review => true).ToList();
         }
@@ -28,14 +28,6 @@ namespace Restaurant_Api.Services
             review._id = IdGenerator.GenerateId;
             _review.InsertOne(review);
 
-        }
-
-        //returns all the review
-        public static List<Review> GetAllReviews()
-        {
-            var filter = Builders<Review>.Filter.Empty;
-            var review = _review.Find(filter).ToList();
-            return review;
         }
 
         //get all reviews by id
