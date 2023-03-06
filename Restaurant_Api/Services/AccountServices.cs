@@ -192,7 +192,11 @@ namespace Restaurant_Api.Services
                 {
                     return null;
                 }
-                account._id = toUpdate._id;
+                account._id = toUpdate._id; //copy the old data
+                account.PastOrders = toUpdate.PastOrders;
+                account.Reviews = toUpdate.Reviews;
+                account.Points = toUpdate.Points;
+
                 filter = Builders<Customer>.Filter.Eq("_id", toUpdate._id);
                 account.Password = EncryptPassword.HashPassword(account.Password);  //Encrypt the password again
                 CustomerCollection.FindOneAndReplace(filter, account);
@@ -393,7 +397,7 @@ namespace Restaurant_Api.Services
                     return null;
                 }
 
-                account._id = toUpdate._id;
+                account._id = toUpdate._id; //Copy the password and past data
                 filter = Builders<Admin>.Filter.Eq("_id", toUpdate._id);
                 account.Password = EncryptPassword.HashPassword(account.Password);  //Encrypt the password again
                 AdminCollection.FindOneAndReplace(filter, account);
@@ -534,7 +538,6 @@ namespace Restaurant_Api.Services
         {
             try
             {
-
                 Employee toUpdate = Get(AccountoUpdate_ID);
                 if (toUpdate == null)
                     return null;
