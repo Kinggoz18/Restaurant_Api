@@ -185,12 +185,16 @@ namespace Restaurant_Api.Services
                 Customer toUpdate = Get(AccountoUpdate_ID);
                 if (toUpdate == null)
                     return null;
-                //Find if an account with the existing email already exists
+
                 FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("EmailAddress", account.EmailAddress);
-                Customer result = CustomerCollection.Find(filter).FirstOrDefault();
-                if (result != null)
+                //Find if an account with the existing email already exists
+                if (toUpdate.EmailAddress != account.EmailAddress)
                 {
-                    return null;
+                    Customer result = CustomerCollection.Find(filter).FirstOrDefault();
+                    if (result != null)
+                    {
+                        return null;
+                    }
                 }
                 account._id = toUpdate._id; //copy the old data
                 account.PastOrders = toUpdate.PastOrders;
