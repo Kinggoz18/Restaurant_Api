@@ -13,12 +13,9 @@
 |
 |------------------------------------------------------------------
 */
-using System;
 using ConnectDatabase;
 using MongoDB.Driver;
-using MongoDB.Bson;
 using Restaurant_Api.Models;
-using System.Collections.ObjectModel;
 
 namespace Restaurant_Api.Services
 {
@@ -49,6 +46,7 @@ namespace Restaurant_Api.Services
             order._id = IdGenerator.GenerateId;
              _orders.InsertOne(order);
             return order;
+            //add the item to a past order once it 
         }
 
         public static Order UpdateOrder(string orderId, Order orderIn)
@@ -85,14 +83,12 @@ namespace Restaurant_Api.Services
         }
 
 
-        //gets order by users 
-        public static List<Order> GetOrdersByUser(string userName)
-        {
-            var filter = Builders<Order>.Filter.Eq("CustomerName", userName);
-            var orders = _orders.Find(filter).ToList();
-            return orders;
-        }
-
+                        //gets order by users by email  
+          public List<Order> GetOrdersByEmail(FilterDefinition<Order> filter)
+          {
+                    var orders = _orders.Find(filter).ToList();
+                    return orders;
+          }
 
 
 

@@ -61,13 +61,17 @@ namespace Restaurant_Api.Controllers
             return orders;
         }
 
-        // GET api/orders/username
+        // GET api/orders/useremail 
         [HttpGet]
-        [Route("GetOrders/{id}")]
+        [Route("GetOrders/{Email}")]
 
-        public ActionResult<List<Order>> GetOrdersByUser(string userName)
+        
+
+        public ActionResult<List<Order>> GetOrdersByEmail(string email)
         {
-            var orders = OrderServices.GetOrdersByUser(userName);
+
+            var filter = Builders<Order>.Filter.Eq("Email", email);
+            var orders = OrderServices.GetOrdersByEmail(filter );
             if (orders == null)
             {
                 return NotFound();
