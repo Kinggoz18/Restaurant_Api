@@ -53,7 +53,19 @@ namespace Restaurant_Api.Controllers
         //Endpoint to update a particular admin account
         [HttpPut]
         [Route("UpdateAdmin/")]
-        public ActionResult<Admin> UpdateAccount(Admin account, string AccountoUpdate_ID) => AdminServices.Update(account, AccountoUpdate_ID);
+        public ActionResult<Admin> UpdateAccount(Admin account, string AccountoUpdate_ID)
+        {
+            Admin updated = AdminServices.Update(account, AccountoUpdate_ID);
+            if(updated == null)
+            {
+                return StatusCode(400);
+            }
+            else
+            {
+                return updated;
+            }
+
+        }
 
         //Endpoint to add a new Admin
         [HttpPost]
@@ -93,8 +105,19 @@ namespace Restaurant_Api.Controllers
         //Endpoint to update a particular admin account
         [HttpPut]
         [Route("UpdateCustomer/")]
-        public ActionResult<Customer> UpdateAccount(Customer account, string AccountoUpdate_ID) => CustomerServices.Update(account, AccountoUpdate_ID);
+        public ActionResult<Customer> UpdateAccount(Customer account, string AccountoUpdate_ID)
+        {
+            Customer updated = CustomerServices.Update(account, AccountoUpdate_ID);
+            if (updated == null)
+            {
+                return StatusCode(400);
+            }
+            else
+            {
+                return updated;
+            }
 
+        }
         //Endpoint to add a new Admin
         [HttpPost]
         [Route("CreateCustomer/")]
@@ -141,8 +164,19 @@ namespace Restaurant_Api.Controllers
         //Endpoint to update a particular Employee account
         [HttpPut]
         [Route("UpdateEmployee/")]
-        public ActionResult<Employee> UpdateAccount(Employee account, string AccountoUpdate_ID) => EmployeeServices.Update(account, AccountoUpdate_ID);
+        public ActionResult<Employee> UpdateAccount(Employee account, string AccountoUpdate_ID)
+        {
+            Employee updated = EmployeeServices.Update(account, AccountoUpdate_ID);
+            if (updated == null)
+            {
+                return StatusCode(400);
+            }
+            else
+            {
+                return updated;
+            }
 
+        }
         //Endpoint to add a Employee Admin
         [HttpPost]
         [Route("CreateEmployee/")]

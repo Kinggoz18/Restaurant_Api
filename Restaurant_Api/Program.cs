@@ -31,6 +31,8 @@ app.UseCors(builder => builder
 
 app.Run();
 
+
+
 public class HostEnvironment
 {
     private IWebHostEnvironment environment;

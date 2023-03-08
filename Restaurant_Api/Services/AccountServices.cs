@@ -21,6 +21,8 @@ using Restaurant_Api.Models;
 using System.Security.Cryptography;
 using System.Net;
 using System.Text;
+using System.Diagnostics;
+using System.Text.Json;
 
 namespace Restaurant_Api.Services
 {
@@ -80,7 +82,7 @@ namespace Restaurant_Api.Services
             }
             catch
             {
-                Console.WriteLine("Inalid body response passed.");
+                Debug.WriteLine("Inalid body response passed.");
                 return null;
             }
         }
@@ -95,7 +97,7 @@ namespace Restaurant_Api.Services
             }
             catch 
             {
-                Console.WriteLine("Inalid body response passed.");
+                Debug.WriteLine("Inalid body response passed.");
                 return null;
             }
         }
@@ -118,12 +120,12 @@ namespace Restaurant_Api.Services
             }
             catch (InvalidOperationException ex)
             {
-                Console.WriteLine("Inalid body response passed.");
+                Debug.WriteLine("Inalid body response passed.");
                 return null;
             }
             catch
             {
-                Console.WriteLine("Inalid body response passed.");
+                Debug.WriteLine("Inalid body response passed.");
                 return null;
             }
         }
@@ -149,12 +151,12 @@ namespace Restaurant_Api.Services
             }
             catch(InvalidOperationException ex)
             {
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
                 return null;
             }
             catch
             {
-                Console.WriteLine("Inalid body response passed.");
+                Debug.WriteLine("Inalid body response passed.");
                 return null;
             }
         }
@@ -172,7 +174,7 @@ namespace Restaurant_Api.Services
             }
             catch
             {
-                Console.WriteLine("Inalid body response passed.");
+                Debug.WriteLine("Inalid body response passed.");
                 return;
             }
         }
@@ -186,29 +188,37 @@ namespace Restaurant_Api.Services
                 if (toUpdate == null)
                     return null;
 
-                FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("EmailAddress", account.EmailAddress);
                 //Find if an account with the existing email already exists
-                if (toUpdate.EmailAddress != account.EmailAddress)
-                {
-                    Customer result = CustomerCollection.Find(filter).FirstOrDefault();
-                    if (result != null)
-                    {
-                        return null;
-                    }
-                }
-                account._id = toUpdate._id; //copy the old data
-                account.PastOrders = toUpdate.PastOrders;
-                account.Reviews = toUpdate.Reviews;
-                account.Points = toUpdate.Points;
+                FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("EmailAddress", account.EmailAddress);
+                Customer result = CustomerCollection.Find(filter).FirstOrDefault();
 
-                filter = Builders<Customer>.Filter.Eq("_id", toUpdate._id);
-                account.Password = EncryptPassword.HashPassword(account.Password);  //Encrypt the password again
-                CustomerCollection.FindOneAndReplace(filter, account);
-                return account;
+                if (result != null && result._id != toUpdate._id)
+                {
+                    // Account with new email address already exists, return null
+                    return null;
+                }
+                else
+                {
+                    // Account with new email address does not exist or is the same as the old one
+                    account._id = toUpdate._id; //copy the old data
+                    account.PastOrders = toUpdate.PastOrders;
+                    account.Reviews = toUpdate.Reviews;
+                    account.Points = toUpdate.Points;
+
+                    // Encrypt the password again
+                    account.Password = EncryptPassword.HashPassword(account.Password);
+
+                    // Update the account in the database
+                    FilterDefinition<Customer> updateFilter = Builders<Customer>.Filter.Eq("_id", account._id);
+                    CustomerCollection.FindOneAndReplace(updateFilter, account);
+                    Debug.WriteLine("Updated Data: {0}", JsonSerializer.Serialize(account));
+                    return account;
+                }
+
             }
             catch 
             {
-                Console.WriteLine("Inalid body response passed.");
+                Debug.WriteLine("Inalid body response passed.");
                 return null;
             }
         }
@@ -225,7 +235,7 @@ namespace Restaurant_Api.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                Debug.WriteLine(ex);
                 return null;
             }
         }
@@ -250,7 +260,7 @@ namespace Restaurant_Api.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                Debug.WriteLine(ex);
                 return null;
             }
         }
@@ -288,7 +298,7 @@ namespace Restaurant_Api.Services
             }
             catch
             {
-                Console.WriteLine("An Exception occured!");
+                Debug.WriteLine("An Exception occured!");
                 return null;
             }
         }
@@ -306,12 +316,12 @@ namespace Restaurant_Api.Services
             catch (InvalidOperationException ex)
             {
 
-                Console.WriteLine("Inalid Admin ID passed.");
+                Debug.WriteLine("Inalid Admin ID passed.");
                 return null;
             }
             catch
             {
-                Console.WriteLine("An Exception occured!");
+                Debug.WriteLine("An Exception occured!");
                 return null;
             }
 
@@ -335,12 +345,12 @@ namespace Restaurant_Api.Services
             }
             catch (InvalidOperationException ex)
             {
-                Console.WriteLine("Inalid body response passed.");
+                Debug.WriteLine("Inalid body response passed.");
                 return null;
             }
             catch
             {
-                Console.WriteLine("An Exception occured!");
+                Debug.WriteLine("An Exception occured!");
                 return null;
             }
         }
@@ -359,7 +369,7 @@ namespace Restaurant_Api.Services
             }
             catch 
             {
-                Console.WriteLine("An Exception occured!");
+                Debug.WriteLine("An Exception occured!");
                 return null;
             }
         }
@@ -378,7 +388,7 @@ namespace Restaurant_Api.Services
             }
             catch
             {
-                Console.WriteLine("An Exception occured!");
+                Debug.WriteLine("An Exception occured!");
                 return;
             }
         }
@@ -409,7 +419,7 @@ namespace Restaurant_Api.Services
             }
             catch
             {
-                Console.WriteLine("An Exception occured!");
+                Debug.WriteLine("An Exception occured!");
                 return null;
             }
         }
@@ -446,7 +456,7 @@ namespace Restaurant_Api.Services
             }
             catch
             {
-                Console.WriteLine("An Exception occured!");
+                Debug.WriteLine("An Exception occured!");
                 return null;
             }
         }
@@ -462,7 +472,7 @@ namespace Restaurant_Api.Services
             }
             catch
             {
-                Console.WriteLine("An Exception occured!");
+                Debug.WriteLine("An Exception occured!");
                 return null;
 
             }
@@ -490,12 +500,12 @@ namespace Restaurant_Api.Services
             }
             catch (InvalidOperationException ex)
             {
-                Console.WriteLine("Inalid body response passed.");
+                Debug.WriteLine("Inalid body response passed.");
                 return null;
             }
             catch
             {
-                Console.WriteLine("An Exception occured!");
+                Debug.WriteLine("An Exception occured!");
                 return null;
             }
 
@@ -513,7 +523,7 @@ namespace Restaurant_Api.Services
             }
             catch
             {
-                Console.WriteLine("Inalid body response passed.");
+                Debug.WriteLine("Inalid body response passed.");
                 return null;
             }
         }
@@ -532,7 +542,7 @@ namespace Restaurant_Api.Services
             }
             catch
             {
-                Console.WriteLine("Inalid body response passed.");
+                Debug.WriteLine("Inalid body response passed.");
                 return;
             }
         }
@@ -560,7 +570,7 @@ namespace Restaurant_Api.Services
             }
             catch
             {
-                Console.WriteLine("Inalid body response passed.");
+                Debug.WriteLine("Inalid body response passed.");
                 return null;
             }
         }
