@@ -61,23 +61,26 @@ namespace Restaurant_Api.Controllers
             return orders;
         }
 
-        // GET api/orders/useremail 
+
+
+
+
         [HttpGet]
-        [Route("GetOrders/{Email}")]
-
-        
-
+        [Route("GetOrders/{CustomerEmail}")]
         public ActionResult<List<Order>> GetOrdersByEmail(string email)
         {
-
-            var filter = Builders<Order>.Filter.Eq("Email", email);
-            var orders = OrderServices.GetOrdersByEmail(filter );
+            var filter = Builders<Order>.Filter.Eq("CustomerEmail", email);
+            var orders = OrderServices.GetOrdersByEmail(filter);
             if (orders == null)
             {
                 return NotFound();
             }
             return orders;
         }
+
+
+
+
 
         [HttpDelete]
         [Route("delete/{id}")]

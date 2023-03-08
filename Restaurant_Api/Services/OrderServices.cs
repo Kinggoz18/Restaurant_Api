@@ -13,9 +13,13 @@
 |
 |------------------------------------------------------------------
 */
+using System;
 using ConnectDatabase;
 using MongoDB.Driver;
+using MongoDB.Bson;
 using Restaurant_Api.Models;
+using System.Collections.ObjectModel;
+using MongoDB.Bson.Serialization;
 
 namespace Restaurant_Api.Services
 {
@@ -83,12 +87,15 @@ namespace Restaurant_Api.Services
         }
 
 
-                        //gets order by users by email  
-          public List<Order> GetOrdersByEmail(FilterDefinition<Order> filter)
-          {
-                    var orders = _orders.Find(filter).ToList();
-                    return orders;
-          }
+        public static List<Order> GetOrdersByEmail(FilterDefinition<Order> filter)
+        {
+            var orders = _orders.Find(filter).ToList();
+            Console.WriteLine($"Found {orders.Count} orders for filter: {filter.Render(BsonSerializer.SerializerRegistry.GetSerializer<Order>(), BsonSerializer.SerializerRegistry)}");
+            return orders;
+        }
+
+
+
 
 
 
