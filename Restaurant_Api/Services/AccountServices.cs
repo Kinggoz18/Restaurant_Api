@@ -286,7 +286,7 @@ namespace Restaurant_Api.Services
                 //Find if an account with the existing email already exists
                 FilterDefinition<Admin> filter = Builders<Admin>.Filter.Eq("EmailAddress", account.EmailAddress);
                 Admin result = AdminCollection.Find(filter).FirstOrDefault();
-                if (result != null)
+                if (result == null)
                 {
                     return null;
                 }

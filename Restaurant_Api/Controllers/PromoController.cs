@@ -76,6 +76,13 @@ namespace Restaurant_Api.Controllers
                 return results;
             }
         }
+        //Endpoint to return a promo value in the database
+        [HttpGet]
+        [Route("GetPromo/{promoString}")]
+        public int GetPromo(string promoString)
+        {
+            return PromoServices.GetPromo(promoString);
+        }
     }
 }
 

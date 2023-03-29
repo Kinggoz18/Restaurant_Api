@@ -113,6 +113,25 @@ namespace Restaurant_Api.Services
                 return null;
             }
         }
-	}
+        //GetAll promo
+        public static int GetPromo(string promo)
+        {
+            try
+            {
+                FilterDefinition<Promo> filter = Builders<Promo>.Filter.Eq("promoString", promo);
+                Promo result = PromoCollection.Find(filter).FirstOrDefault();
+                if (result != null)
+                {
+                    return (int)result.promoDiscount;
+                }
+                return -1;
+            }
+            catch
+            {
+                Console.WriteLine("Inalid body response passed.");
+                return -1;
+            }
+        }
+    }
 }
 
