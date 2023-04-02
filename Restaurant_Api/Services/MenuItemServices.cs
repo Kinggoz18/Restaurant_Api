@@ -32,7 +32,11 @@ namespace Restaurant_Api.Services
 {
     public class MenuItemServices
     {
-        static Account account = new Account("dw1wmzgy1", "759371847652932", "9cBN-hEOeghmkNzuBZd5yDdnezk");
+        static string cloudinaryName = Environment.GetEnvironmentVariable("COULDINARY_NAME");
+        static string cloudinaryKey = Environment.GetEnvironmentVariable("CLOUDINARY_API_KEY");
+        static string cloudinarySecret = Environment.GetEnvironmentVariable("CLOUDINARY_SECRET");
+
+        static Account account = new Account(cloudinaryName, cloudinaryKey, cloudinarySecret);
         static Cloudinary cloudinary = new Cloudinary(account);
 
         static ConnectDB? connection = new ConnectDB();

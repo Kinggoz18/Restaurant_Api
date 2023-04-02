@@ -23,7 +23,16 @@ namespace ConnectDatabase
 		private readonly MongoClient client;
         public ConnectDB()
 		{
-			client = new MongoClient("mongodb+srv://billyrestaurant:{Restaurant2022}@cluster0.dzorkng.mongodb.net/?retryWrites=true&w=majority");
+			string password = Environment.GetEnvironmentVariable("MONGODB_PASSWORD");
+			if (password != null)
+			{
+                string connectionString = string.Format("mongodb+srv://billyrestaurant:{0}@cluster0.dzorkng.mongodb.net/?retryWrites=true&w=majority", password);
+                client = new MongoClient(connectionString);
+            }
+			else
+			{
+				throw new Exception("MONGODB_PASSWORD Environment variable not set");
+			}
         }
 
 		public MongoClient Client
