@@ -31,8 +31,8 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "MONGODB_PASSWORD": "{Restaurant2022}",
         "COULDINARY_NAME": "dw1wmzgy1",
-        "CLOUDINARY_API_KECLOUDINARY_API_KECLOUDINARY_API_KEY": "759371847652932",
-        "CLOUDINARY_SECRET": "9cBN-hEOeghmkNzuBZd5yDdnezk"
+        "CLOUDINARY_SECRET": "9cBN-hEOeghmkNzuBZd5yDdnezk",
+        "CLOUDINARY_API_KEY": "759371847652932"
       }
     },
     "IIS Express": {
