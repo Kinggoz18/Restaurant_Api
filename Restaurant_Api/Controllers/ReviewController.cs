@@ -71,7 +71,8 @@ namespace Restaurant_Api.Controllers
             }
 
             ReviewServices.RemoveReview(id);
-            return NoContent();
+            return StatusCode(200);
+            ;
         }
     }
 }
