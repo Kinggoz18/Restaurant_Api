@@ -46,10 +46,14 @@ namespace Restaurant_Api.Services
             return review ;
         }
 
-        //delete customer reviews by user id 
+        //delete customer reviews by  id 
         public static void RemoveReview(string id)
         {
-            var review = _review.DeleteOne(o => o.UserId == id);
+            Review toRemove = GetReview(id);
+            if (toRemove == null)
+                return;
+            FilterDefinition<Review> filter = Builders<Review>.Filter.Eq("_id", toRemove._id);
+            _review.FindOneAndDelete(filter);
         }
 
         //delete customer reviews by object 

@@ -66,10 +66,10 @@ namespace Restaurant_Api.Controllers
 
 
         [HttpGet]
-        [Route("GetOrders/{CustomerEmail}")]
-        public ActionResult<List<Order>> GetOrdersByEmail(string email)
+        [Route("GetOrdersByEmail/{CustomerEmail}")]
+        public ActionResult<List<Order>> GetOrdersByEmail(string CustomerEmail)
         {
-            var filter = Builders<Order>.Filter.Eq("CustomerEmail", email);
+            var filter = Builders<Order>.Filter.Eq("CustomerEmail", CustomerEmail);
             var orders = OrderServices.GetOrdersByEmail(filter);
             if (orders == null)
             {

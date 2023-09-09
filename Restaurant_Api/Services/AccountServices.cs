@@ -406,8 +406,9 @@ namespace Restaurant_Api.Services
                 //Find if an account with the existing email already exists
                 FilterDefinition<Admin> filter = Builders<Admin>.Filter.Eq("EmailAddress", account.EmailAddress);
                 Admin result = AdminCollection.Find(filter).FirstOrDefault();
-                if (result != null)
+                if (result != null && result._id != toUpdate._id)
                 {
+                    // Account with new email address already exists, return null
                     return null;
                 }
 
@@ -558,8 +559,9 @@ namespace Restaurant_Api.Services
                 //Find if an account with the existing email already exists
                 FilterDefinition<Employee> filter = Builders<Employee>.Filter.Eq("EmailAddress", account.EmailAddress);
                 Employee result = EmployeeCollection.Find(filter).FirstOrDefault();
-                if (result != null)
+                if (result != null && result._id != toUpdate._id)
                 {
+                    // Account with new email address already exists, return null
                     return null;
                 }
                 account._id = toUpdate._id;

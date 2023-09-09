@@ -90,7 +90,6 @@ namespace Restaurant_Api.Services
         public static List<Order> GetOrdersByEmail(FilterDefinition<Order> filter)
         {
             var orders = _orders.Find(filter).ToList();
-            Console.WriteLine($"Found {orders.Count} orders for filter: {filter.Render(BsonSerializer.SerializerRegistry.GetSerializer<Order>(), BsonSerializer.SerializerRegistry)}");
             return orders;
         }
 
